@@ -32,12 +32,9 @@ def login():
     def invalid_credentials():
         #TODO: use logging
         msg = 'Invalid credentials'
-        flash(msg, 'error')
         print('login() msg:', msg)
-        render_template(
-          'user/login.html',
-          error_message=msg
-        )
+        flash(msg, 'error')
+        render_template('user/login.html')
 
     if request.method == 'POST':
         email = request.form['input-email']
@@ -50,7 +47,11 @@ def login():
                 msg = 'Logged in successfully.'
                 print('login() msg', msg)
                 flash(msg, 'info')
-                return redirect(url_for('home.main'))
+                try:
+                    next_url = url_for(request.args.get('next'))
+                except:
+                    next_url = url_for('home.main')
+                return redirect(next_url)
             else:
                 invalid_credentials()
         else:
@@ -71,10 +72,7 @@ def register():
             msg = 'User already exists'
             print('register() msg:', msg)
             flash(msg, 'error')
-            return render_template(
-                'user/register.html',
-                error_message=msg
-            )
+            return render_template('user/register.html')
         else:
             user = mongo.db.users.insert({
                 'email': email,

@@ -2,23 +2,31 @@
 <html lang="en">
 
 
-{% macro nav_link(endpoint, name) %}
-  {% if request.endpoint == endpoint %}
-    <li class="nav-item active">
-      <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
-    </li>
-  {% else %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
-    </li>
-  {% endif %}
+{% macro nav_link(
+  endpoint,
+  name,
+  active="active" if request.endpoint==endpoint else "",
+  turbo="true"
+) %}
+  <li class="nav-item {{active}}">
+    <a
+      class="nav-link"
+      href="{{ url_for(endpoint) }}"
+      data-turbolinks="{{ turbo }}"
+    >
+      {{name}}
+    </a>
+  </li>
 {% endmacro %}
 
 
 <head>
 
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  >
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -100,7 +108,7 @@
           {{ nav_link('home.main', 'Home') }}
           {% if current_user.is_authenticated %}
 					  {{ nav_link('user.profile', 'Profile') }}
-            {{ nav_link('user.logout', 'Logout') }}
+            {{ nav_link('user.logout', 'Logout', turbo="false") }}
           {% else %}
             {{ nav_link('user.register', 'Register') }}
             {{ nav_link('user.login', 'Login') }}
