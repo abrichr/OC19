@@ -99,7 +99,7 @@
         <ul class="navbar-nav ml-auto">
           {{ nav_link('home.main', 'Home') }}
           {% if current_user.is_authenticated %}
-					  {{ nav_link('user.profile', current_user.name or current_user.email) }}
+					  {{ nav_link('user.profile', 'Profile') }}
             {{ nav_link('user.logout', 'Logout') }}
           {% else %}
             {{ nav_link('user.register', 'Register') }}
