@@ -8,7 +8,7 @@ from app.project import project_blueprint
 from app.project.forms import SubmitProjectForm
 
 
-@project_blueprint.route('/submit', methods=['GET', 'POST'])
+@project_blueprint.route('/submit/', methods=['GET', 'POST'])
 @login_required
 def submit():
     form = SubmitProjectForm()
@@ -23,7 +23,7 @@ def submit():
     return render_template('project/submit.html', form=form)
 
 
-@project_blueprint.route('/<project_id>', methods=['GET'])
+@project_blueprint.route('/<project_id>/', methods=['GET'])
 def view(project_id):
     project = mongo.db.projects.find_one({'_id': ObjectId(project_id)})
     return render_template('project/view.html', project=project)

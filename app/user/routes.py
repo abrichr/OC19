@@ -12,13 +12,13 @@ def load_user(email):
     return User(users['email'], users['name'], users['can_invite_users'])
 
 
-@user_blueprint.route('/profile')
+@user_blueprint.route('/profile/')
 @login_required
 def profile():
     return render_template('user/profile.html')
 
 
-@user_blueprint.route('/logout')
+@user_blueprint.route('/logout/')
 @login_required
 def logout():
     logout_user()
@@ -26,7 +26,7 @@ def logout():
     return redirect(url_for('home.main'))
 
 
-@user_blueprint.route('/login', methods=['POST', 'GET'])
+@user_blueprint.route('/login/', methods=['POST', 'GET'])
 def login():
 
     def invalid_credentials():
@@ -56,7 +56,7 @@ def login():
     return render_template('user/login.html')
 
 
-@user_blueprint.route('/register', methods=['GET', 'POST'])
+@user_blueprint.route('/register/', methods=['GET', 'POST'])
 @user_blueprint.route('/register/<invite_code>', methods=['GET', 'POST'])
 def register(invite_code=None):
     if request.method == 'POST':
