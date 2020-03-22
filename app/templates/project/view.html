@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}
+
+- {{ project.name }}
+
+{% endblock %}
+
+
+{% from "helpers/_formhelpers.html" import render_field %}
+
+
+{% block content %}
+
+<div class="container">
+  <h2>{{ project.title }}</h2>
+  <dt>Description</dt>
+  <dd>{{ project.description }}</dd>
+  <dt>Needed</dt>
+  <dd>{{ project.needed }}</dd>
+  <dt>Provided</dt>
+  <dd>{{ project.provided }}</dd>
+</div>
+
+{% endblock %}

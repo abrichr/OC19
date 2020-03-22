@@ -8,15 +8,44 @@
 {% endblock %}
 
 
-{% block css %}
+{% block styles %}
+
+<style>
+
+#submit-project ul {
+  margin: 0;
+  padding: 0;
+}
+#submit-project ul li {
+  list-style: none;
+}
+
+</style>
 
 {% endblock %}
+
+
+{% from "helpers/_formhelpers.html" import render_field %}
 
 
 {% block content %}
 
 <div class="container">
-    <h2>Submit a Project</h2>
+  <h2>Submit a Project</h2>
+  <form
+    id="submit-project"
+    method="POST"
+    action="{{ url_for('project.submit') }}"
+  >
+    {{ form.csrf_token }}
+    {{ render_field(form.title) }}
+    {{ render_field(form.description) }}
+    {{ render_field(form.needed) }}
+    {{ render_field(form.provided) }}
+    <button class="btn btn-primary" type="submit">
+      Submit
+    </button>
+  </form>
 </div>
 
 {% endblock %}
