@@ -53,7 +53,13 @@
   </script>
   <script src="{{ url_for('static', filename='js/lib/jquery.min.js') }}">
   </script>
+  <script src="{{ url_for('static', filename='js/lib/popper.min.js') }}">
+  </script>
   <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}">
+  </script>
+  <script src="{{ url_for('static', filename='js/lib/fontawesome.min.js') }}">
+  </script>
+  <script src="{{ url_for('static', filename='js/lib/clipboard.min.js') }}">
   </script>
 
 </head>
@@ -110,6 +116,9 @@
           {{ nav_link('home.main', 'Home') }}
           {% if current_user.is_authenticated %}
 					  {{ nav_link('user.profile', 'Profile') }}
+            {% if current_user.can_invite_users %}
+              {{ nav_link('admin.invite', 'Invite') }}
+            {% endif %}
             {{ nav_link('user.logout', 'Logout', turbo="false") }}
           {% else %}
             {{ nav_link('user.register', 'Register') }}

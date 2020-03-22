@@ -22,6 +22,9 @@ app.register_blueprint(home_blueprint)
 from app.project import project_blueprint
 app.register_blueprint(project_blueprint, url_prefix='/project')
 
+from app.admin import admin_blueprint
+app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
 login_manager.login_view = "user.login"
 
 

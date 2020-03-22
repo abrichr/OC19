@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}
+
+- Send Invite
+
+{% endblock %}
+
+
+{% block styles %}
+
+<style>
+
+input:read-only {
+  background: #fff !important;
+}
+
+</style>
+
+{% endblock %}
+
+
+{% from "helpers/_formhelpers.html" import render_field %}
+
+
+{% block content %}
+
+<div class="container">
+  <h2>Invite</h2>
+  <div class="form-row justify-content-center">
+    <div class="col-md-6 col-sm-8 col-12">
+      {% if invite_url %}
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="invite-code"
+            readonly 
+            value="{{ invite_url }}"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="copy-button"
+              data-clipboard-target="#invite-code"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Copy"
+            >
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+      <form action="{{ url_for('admin.invite') }}" method="post">
+        <button
+          class="btn btn-primary btn-block"
+          type="submit"
+        >
+          Generate Invite Code
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  var clipboard = new ClipboardJS('.btn')
+  clipboard.on('success', (e) => {
+    let trigger = e.trigger
+    let $trigger = $(trigger)
+    let originalTitle = $trigger.attr('data-original-title')
+    $trigger
+      .attr('data-original-title', 'Copied!')
+      .tooltip('show')
+      .mouseout(() => {
+        $trigger.attr('data-original-title', originalTitle)
+      })
+  })
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
+</script>
+
+{% endblock %}

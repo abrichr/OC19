@@ -9,7 +9,7 @@ def load_user(email):
     users = mongo.db.users.find_one({'email': email})
     if not users:
         return None
-    return User(users['email'], users['name'])
+    return User(users['email'], users['name'], users['can_invite_users'])
 
 
 @user_blueprint.route('/profile')
@@ -42,7 +42,7 @@ def login():
         user = mongo.db.users.find_one({'email': email})
         if user:
             if User.validate_login(user['password'], password):
-                user_obj = User(email, user['name'])
+                user_obj = User(email, user['name'], user['can_invite_users'])
                 login_user(user_obj)
                 msg = 'Logged in successfully.'
                 print('login() msg', msg)
@@ -57,7 +57,8 @@ def login():
 
 
 @user_blueprint.route('/register', methods=['GET', 'POST'])
-def register():
+@user_blueprint.route('/register/<invite_code>', methods=['GET', 'POST'])
+def register(invite_code=None):
     if request.method == 'POST':
         name = request.form['input-name']
         email = request.form['input-email']
@@ -69,13 +70,16 @@ def register():
             msg = 'User already exists'
             print('register() msg:', msg)
             flash(msg, 'error')
-            return render_template('user/register.html')
+            return render_template(
+                'user/register.html', invite_code=invite_code
+            )
         else:
             user = mongo.db.users.insert({
                 'email': email,
                 'name': name,
                 'password': bcrypt.generate_password_hash(password),
-                'authenticated': False
+                'authenticated': False,
+                'can_invite_users': False
             })
             print('register() new user:', user)
             msg = 'Logged in successfully.'
@@ -85,4 +89,4 @@ def register():
             login_user(user_obj)
             return redirect(url_for('home.main'))
     else:
-        return render_template('user/register.html')
+        return render_template('user/register.html', invite_code=invite_code)

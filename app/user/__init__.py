@@ -8,9 +8,10 @@ user_blueprint = Blueprint('user', __name__)
 
 
 class User(UserMixin):
-    def __init__(self, email, name):
+    def __init__(self, email, name, can_invite_users=False):
         self.email = email
         self.name = name
+        self.can_invite_users = can_invite_users
 
     @staticmethod
     def is_authenticated(self):
