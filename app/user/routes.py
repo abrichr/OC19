@@ -47,10 +47,7 @@ def login():
                 msg = 'Logged in successfully.'
                 print('login() msg', msg)
                 flash(msg, 'info')
-                try:
-                    next_url = url_for(request.args.get('next'))
-                except:
-                    next_url = url_for('home.main')
+                next_url = request.args.get('next', url_for('home.main'))
                 return redirect(next_url)
             else:
                 invalid_credentials()
