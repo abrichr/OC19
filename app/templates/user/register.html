@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/login.css')}}"
+/>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+
+  <h2 class="login-form-heading">Register</h2>
+
+  <form class="login-form" method="post">
+    <input
+      type="text"
+      id="input-name"
+      name="input-name"
+      class="form-control"
+      placeholder="Name"
+      required
+			autofocus
+    >
+    <input
+      type="email"
+      id="input-email"
+      name="input-email"
+      class="form-control"
+      placeholder="Email address"
+      required
+    >
+    <input
+      type="password"
+      id="input-password"
+      class="form-control"
+      name="input-password"
+      placeholder="Password"
+      required
+    >
+    <button class="btn btn-lg btn-primary btn-block" type="submit">
+      Register
+    </button>
+  </form>
+
+</div>
+
+
+{% endblock %}

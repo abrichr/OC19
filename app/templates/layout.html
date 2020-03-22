@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+{% macro nav_link(endpoint, name) %}
+  {% if request.endpoint == endpoint %}
+    <li class="nav-item active">
+      <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
+    </li>
+  {% else %}
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for(endpoint) }}">{{name}}</a>
+    </li>
+  {% endif %}
+{% endmacro %}
+
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>
+		{{ app_name }}
+    {% block title %}
+    {% endblock %}
+  </title>
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='css/lib/bootstrap.min.css') }}"
+  />
+  <link
+    rel="shortcut icon"
+    href="{{ url_for('static', filename='favicon.ico') }}"
+  />
+
+
+  {% block css %}
+  {% endblock %}
+
+  <script src="{{ url_for('static', filename='js/lib/turbolinks.js') }}">
+  </script>
+
+</head>
+
+<style>
+
+.container > h1,
+.container > h2
+{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.flashes {
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+.flashes li {
+    list-style: none;
+    display: block;
+    text-align: center;
+}
+
+</style>
+
+
+{% block styles %}
+
+{% endblock %}
+
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">{{ app_name }}</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarResponsive"
+        aria-controls="navbarResponsive"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          {{ nav_link('home.main', 'Home') }}
+          {% if current_user.is_authenticated %}
+					  {{ nav_link('user.profile', current_user.name or current_user.email) }}
+            {{ nav_link('user.logout', 'Logout') }}
+          {% else %}
+            {{ nav_link('user.register', 'Register') }}
+            {{ nav_link('user.login', 'Login') }}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li>
+              {% if category == "error" %}
+                <div class="alert alert-danger" role="alert">
+                  {{ message }}
+                </div>
+              {% else %}
+                <div class="alert alert-success" role="alert">
+                  {{ message }}
+                </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  {% block content %}
+  {% endblock %}
+
+</body>
+
+</html>
