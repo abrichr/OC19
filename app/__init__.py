@@ -19,6 +19,9 @@ app.register_blueprint(user_blueprint, url_prefix='/user')
 from app.home import home_blueprint
 app.register_blueprint(home_blueprint)
 
+from app.project import project_blueprint
+app.register_blueprint(project_blueprint, url_prefix='/project')
+
 login_manager.login_view = "user.login"
 
 

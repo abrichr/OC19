@@ -19,6 +19,15 @@
       <p class="lead">
         Find problems, join teams, build solutions.
       </p>
+      {% if current_user.is_authenticated %}
+        <a
+          href="{{ url_for('project.submit') }}"
+          class="btn btn-lg btn-primary"
+          type="submit"
+        >
+          Submit a Project
+        </a>
+      {% endif %}
     </div>
   </div>
 </div>
