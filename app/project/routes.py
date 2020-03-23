@@ -37,10 +37,24 @@ def submit():
     )
 
 
+def add_user_to_project(project_id, user_id):
+    print('add_user_to_project() project_id:', project_id, 'user_id:', user_id)
+    result = mongo.db.projects.update_one({
+        '_id': ObjectId(project_id)
+    }, {
+        '$addToSet': {
+            'users': ObjectId(user_id)
+        }
+    })
+    modified_count = result.modified_count
+    print('add_user_to_project() modified_count:', modified_count)
+    return modified_count
+
+
 @project_blueprint.route('/join/<project_id>/', methods=['GET', 'POST'])
 @login_required
 def join(project_id):
-    # TODO: join current user to project
+    add_user_to_project(project_id, current_user.id)
     return redirect(url_for('project.view', project_id=project_id))
 
 
