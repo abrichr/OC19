@@ -34,7 +34,8 @@ def bootstrap():
                 os.environ['ADMIN_PASSWORD']
             ),
             'authenticated': False,
-            'can_invite_users': True
+            'can_invite_users': True,
+            'can_create_projects': True
         })
         print('admin.bootstrap() inserted user:', user)
     return redirect(url_for('user.login'))

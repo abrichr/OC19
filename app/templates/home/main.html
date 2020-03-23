@@ -19,7 +19,7 @@
       <p class="lead">
         Find problems, join teams, build solutions.
       </p>
-      {% if current_user.is_authenticated %}
+      {% if current_user.can_create_projects %}
         <a
           href="{{ url_for('project.submit') }}"
           class="btn btn-lg btn-primary"

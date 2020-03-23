@@ -33,8 +33,8 @@
       class="form-control"
       placeholder="Name"
       required
-			autofocus
-    >
+      autofocus
+    />
     <input
       type="email"
       id="input-email"
@@ -42,7 +42,7 @@
       class="form-control"
       placeholder="Email address"
       required
-    >
+    />
     <input
       type="password"
       id="input-password"
@@ -50,7 +50,23 @@
       name="input-password"
       placeholder="Password"
       required
-    >
+    />
+    {% if invite_code %}
+      <input
+        type="text"
+        id="input-title"
+        name="input-title"
+        class="form-control"
+        placeholder="Job Title"
+      />
+      <input
+        type="text"
+        id="input-title"
+        name="input-title"
+        class="form-control"
+        placeholder="Organization"
+      />
+    {% endif %}
     <button class="btn btn-lg btn-primary btn-block" type="submit">
       Register
     </button>
