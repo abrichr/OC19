@@ -8,4 +8,5 @@ RUN pip3 install -r requirements.txt && pip install gunicorn
 CMD gunicorn -b 0.0.0.0:$PORT \
     #--access-logfile /var/log/gunicorn-access.log \
     #--error-logfile /var/log/gunicorn-error.log \
-    app:app
+    app:app \
+    --log-level DEBUG
