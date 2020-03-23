@@ -46,8 +46,18 @@ def join(project_id):
 
 @project_blueprint.route('/<project_id>/', methods=['GET'])
 def view(project_id):
+    print('current_user:', vars(current_user))
     project = mongo.db.projects.find_one({'_id': ObjectId(project_id)})
     return render_template('project/view.html', project=project)
+
+
+@project_blueprint.route('/delete/<project_id>/', methods=['POST'])
+def delete(project_id):
+    result = mongo.db.projects.delete_one({'_id': ObjectId(project_id)})
+    num_deleted = result.deleted_count
+    print('delete() num_deleted:', num_deleted)
+    flash('{} project(s) deleted'.format(num_deleted))
+    return redirect(url_for('home.main'))
 
 
 def get_project_views():

@@ -1,7 +1,8 @@
+from bson.objectid import ObjectId
 from flask import Blueprint
 from flask_login import UserMixin
 
-from app import bcrypt, mongo, login_manager
+from app import app, bcrypt, mongo, login_manager
 
 
 user_blueprint = Blueprint('user', __name__)
@@ -24,6 +25,9 @@ class User(UserMixin):
         self.password_hash = password_hash
         self.can_invite_users = can_invite_users
         self.can_create_projects = can_create_projects
+        self.project_ids = self._get_project_ids()
+        # TODO: set this separately
+        self.is_superadmin = can_invite_users
 
     @staticmethod
     def is_authenticated(self):
@@ -35,6 +39,21 @@ class User(UserMixin):
     @staticmethod
     def validate_login(password_hash, password):
         return bcrypt.check_password_hash(password_hash, password)
+
+    def can_edit_project(project_id):
+        # TODO: add separate permission for admin
+        return self.can_invite_users or project_id in self.project_ids
+
+    def _get_project_ids(self):
+        project_ids = set()
+        result = mongo.db.projects.find({
+            'user_id': ObjectId(self.id)
+        })
+        for project in result:
+            project_id = str(project['_id'])
+            print('User.project_ids project_id:', project_id)
+            project_ids.add(project_id)
+        return project_ids
 
 
 @login_manager.user_loader

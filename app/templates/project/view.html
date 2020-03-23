@@ -29,6 +29,16 @@
       Join
     </button>
   </form>
+  {% if current_user.is_superadmin or project._id in current_user.project_ids %}
+    <form
+      method="post"
+      action="{{ url_for('project.delete', project_id=project._id) }}"
+    >
+      <button class="btn btn-danger" type="submit">
+        Delete
+      </button>
+    </form>
+  {% endif %}
 </div>
 
 {% endblock %}
