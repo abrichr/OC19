@@ -59,9 +59,10 @@ def get_invite_views():
         user_id = invite['user_id']
         email = email_by_id.get(user_id)
         invite_code = invite['invite_code']
-        invite_link = get_invite_link(invite_code)
+        invite_link, invite_href = get_invite_link(invite_code)
         invite_views.append({
             'invite_link': invite_link,
+            'invite_href': invite_href,
             'email': email
         })
     print('get_invite_views() invite_views:', invite_views)
@@ -70,10 +71,14 @@ def get_invite_views():
 
 def get_invite_link(invite_code):
     host = request.host
-    invite_link = url_for('user.register', invite_code=invite_code)
-    invite_link = '{}{}'.format(host, invite_link)
-    print('get_invite_link() invite_code:', invite_code)
-    return invite_link
+    invite_href = url_for('user.register', invite_code=invite_code)
+    invite_link = '{}{}'.format(host, invite_href)
+    print(
+        'get_invite_link() invite_code:', invite_code,
+        'invite_href:', invite_href,
+        'invite_link:', invite_link
+    )
+    return invite_link, invite_href
 
 
 @admin_blueprint.route('/invite', methods=['GET', 'POST'])
@@ -84,7 +89,7 @@ def invite():
     invite_link = None
     if request.method == 'POST':
         invite_code = get_invite_code()
-        invite_link = get_invite_link(invite_code)
+        invite_link, invite_href = get_invite_link(invite_code)
         invite = mongo.db.invites.insert({
             'user_id': None,
             'invite_code': invite_code
