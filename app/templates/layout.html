@@ -31,7 +31,7 @@
   <meta name="author" content="">
 
   <title>
-		{{ app_name }}
+    {{ app_name }}
     {% block title %}
     {% endblock %}
   </title>
@@ -86,11 +86,20 @@
   margin-bottom: 0;
 }
 
-#footer {
-  text-align: center;
-  font-size: 80%;
-  margin-top: 20px;
-  color: #888;
+/* Sticky Footer https://startbootstrap.com/snippets/sticky-footer-flexbox/ */
+
+html,
+body {
+  height: 100%;
+}
+
+#page-content {
+  flex: 1 0 auto;
+}
+
+#sticky-footer {
+  margin-top: 30px;
+  flex-shrink: none;
 }
 
 </style>
@@ -101,69 +110,75 @@
 {% endblock %}
 
 
-<body>
+<body class="d-flex flex-column">
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
-    <div class="container">
-      <a class="navbar-brand" href="/">{{ app_name }}</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbar-responsive"
-        aria-controls="navbar-responsive"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbar-responsive">
-        <ul class="navbar-nav ml-auto">
-          {{ nav_link('home.main', 'Home') }}
-          {% if current_user.is_authenticated %}
-					  {{ nav_link('user.profile', 'Profile') }}
-            {% if current_user.can_invite_users %}
-              {{ nav_link('admin.invite', 'Invite') }}
-            {% endif %}
-            {{ nav_link('user.logout', 'Logout', turbo="false") }}
-          {% else %}
-            {{ nav_link('user.register', 'Register') }}
-            {{ nav_link('user.login', 'Login') }}
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div id="page-content">
 
-  <div class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flashes">
-          {% for category, message in messages %}
-            <li>
-              {% if category == "error" %}
-                <div class="alert alert-danger" role="alert">
-                  {{ message }}
-                </div>
-              {% else %}
-                <div class="alert alert-success" role="alert">
-                  {{ message }}
-                </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">{{ app_name }}</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbar-responsive"
+          aria-controls="navbar-responsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-responsive">
+          <ul class="navbar-nav ml-auto">
+            {{ nav_link('home.main', 'Home') }}
+            {% if current_user.is_authenticated %}
+              {{ nav_link('user.profile', 'Profile') }}
+              {% if current_user.can_invite_users %}
+                {{ nav_link('admin.invite', 'Invite') }}
               {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+              {{ nav_link('user.logout', 'Logout', turbo="false") }}
+            {% else %}
+              {{ nav_link('user.register', 'Register') }}
+              {{ nav_link('user.login', 'Login') }}
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for category, message in messages %}
+              <li>
+                {% if category == "error" %}
+                  <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                  </div>
+                {% else %}
+                  <div class="alert alert-success" role="alert">
+                    {{ message }}
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
   </div>
 
-  {% block content %}
-  {% endblock %}
-
-  <div id="footer">
-    <p>Made in Toronto</p>
-  </div>
+  <footer id="sticky-footer" class="py-4 bg-light text-black-50">
+    <div class="container text-center">
+      <small>Made in Toronto</small>
+    </div>
+  </footer>
 
 </body>
 
