@@ -1,5 +1,7 @@
+from bson.objectid import ObjectId
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required
+
 from app import mongo, bcrypt
 from app.user import user_blueprint, User, load_user
 
@@ -48,14 +50,13 @@ def login():
     return render_template('user/login.html')
 
 
-def set_invite_user(invite, user_dict):
+def set_invite_user(invite, user_id):
     if not invite:
         return
     invite_id = invite['_id']
-    user_id = invite['user_id']
     print('admin.set_invite_user() invite_id:', invite_id, 'user_id:', user_id)
     result = mongo.db.invites.update_one({
-        '_id': invite_id
+        '_id': ObjectId(invite_id)
     }, {
         '$set': {
             'user_id': user_id
@@ -88,20 +89,22 @@ def register(invite_code=None):
                 'user/register.html', invite_code=invite_code
             )
         else:
-            user_dict = mongo.db.users.insert({
+            user_dict = {
                 'email': email,
                 'name': name,
                 'password': bcrypt.generate_password_hash(password),
                 'authenticated': False,
                 'can_invite_users': False,
                 'can_create_projects': bool(invite_code)
-            })
-            print('register() new user_dict:', user_dict)
-            set_invite_user(invite, user_dict)
+            }
+            result = mongo.db.users.insert_one(user_dict)
+            user_id = result.inserted_id
+            print('register() new user_dict:', user_dict, 'user_id:', user_id)
+            set_invite_user(invite, user_id)
             msg = 'Logged in successfully.'
             print('register() msg', msg)
             flash(msg, 'info')
-            user = load_user(email, user)
+            user = load_user(email, user_dict)
             login_user(user)
             return redirect(url_for('home.main'))
     else:

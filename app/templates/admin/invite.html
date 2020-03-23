@@ -16,6 +16,10 @@ input:read-only {
   background: #fff !important;
 }
 
+#invite-table {
+  margin-top: 20px;
+}
+
 </style>
 
 {% endblock %}
@@ -28,16 +32,16 @@ input:read-only {
 
 <div class="container">
   <h2>Invite</h2>
-  <div class="form-row justify-content-center">
+  <div class="row justify-content-center">
     <div class="col-md-6 col-sm-8 col-12">
-      {% if invite_url %}
+      {% if invite_link %}
         <div class="input-group mb-3">
           <input
             type="text"
             class="form-control"
             id="invite-code"
             readonly 
-            value="{{ invite_url }}"
+            value="{{ invite_link }}"
           />
           <div class="input-group-append">
             <button
@@ -64,6 +68,25 @@ input:read-only {
       </form>
     </div>
   </div>
+  {% if invite_views  %}
+    <table class="table" id="invite-table">
+      <tr>
+        <th>Invite Link</th>
+        <th>User Email</th>
+      </tr>
+      {% for invite in invite_views  %}
+        <tr>
+          <td>
+            <a href="{{ invite['invite_link'] }}">
+              {{ invite['invite_link'] }}
+            </a>
+          </td>
+          <td>
+            {{ invite['email'] or '' }}
+          </td>
+      {% endfor %}
+    </table>
+  {% endif %}
 </div>
 
 <script type="text/javascript">

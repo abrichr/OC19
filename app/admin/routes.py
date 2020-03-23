@@ -41,21 +41,58 @@ def bootstrap():
     return redirect(url_for('user.login'))
 
 
+def get_invite_views():
+    invite_views = []
+    invites = mongo.db.invites.find()
+    invites = [invite for invite in invites]
+    user_ids = [invite['user_id'] for invite in invites if invite['user_id']]
+    print('get_invite_views() user_ids:', user_ids)
+    users = mongo.db.users.find({
+        '_id': {
+            '$in': user_ids
+        }
+    })
+    users = [user for user in users]
+    print('get_invite_views() users:', users, 'invites:', invites)
+    email_by_id = {user['_id']: user['email'] for user in users}
+    for invite in invites:
+        user_id = invite['user_id']
+        email = email_by_id.get(user_id)
+        invite_code = invite['invite_code']
+        invite_link = get_invite_link(invite_code)
+        invite_views.append({
+            'invite_link': invite_link,
+            'email': email
+        })
+    print('get_invite_views() invite_views:', invite_views)
+    return invite_views
+
+
+def get_invite_link(invite_code):
+    host = request.host
+    invite_link = url_for('user.register', invite_code=invite_code)
+    invite_link = '{}{}'.format(host, invite_link)
+    print('get_invite_link() invite_code:', invite_code)
+    return invite_link
+
+
 @admin_blueprint.route('/invite', methods=['GET', 'POST'])
 @login_required
 def invite():
     if not current_user.can_invite_users:
         abort(404)
-    invite_url = None
-    invites = mongo.db.invites.find()
+    invite_link = None
     if request.method == 'POST':
         invite_code = get_invite_code()
-        host = request.host
-        invite_url = url_for('user.register', invite_code=invite_code)
-        invite_url = '{}{}'.format(host, invite_url)
+        invite_link = get_invite_link(invite_code)
         invite = mongo.db.invites.insert({
             'user_id': None,
             'invite_code': invite_code
         })
         print('admin.invite() new invite:', invite)
-    return render_template('admin/invite.html', invite_url=invite_url)
+    invite_views = get_invite_views()
+    return render_template(
+        'admin/invite.html',
+        invite_link=invite_link,
+        invite_views=invite_views
+    )
