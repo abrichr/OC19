@@ -31,7 +31,7 @@ login_manager.login_view = "user.login"
 
 @app.context_processor
 def inject_app_name():
-    return dict(app_name='OC19')
+    return dict(app_name='OnCOVID-19')
 
 
 @app.errorhandler(404)
