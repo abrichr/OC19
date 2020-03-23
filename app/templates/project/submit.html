@@ -42,10 +42,10 @@
     action="{{ url_for('project.submit') }}"
   >
     {{ form.csrf_token }}
-    {{ render_field(form.title) }}
-    {{ render_field(form.description) }}
-    {{ render_field(form.needed) }}
-    {{ render_field(form.provided) }}
+    {{ render_field(form.title, is_invalid) }}
+    {{ render_field(form.description, is_invalid) }}
+    {{ render_field(form.needed, is_invalid) }}
+    {{ render_field(form.provided, is_invalid) }}
     <button class="btn btn-primary" type="submit">
       Submit
     </button>

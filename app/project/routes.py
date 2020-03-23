@@ -13,22 +13,28 @@ from app.project.forms import SubmitProjectForm
 def submit():
     form = SubmitProjectForm()
     is_valid = form.validate()
+    was_submitted = request.method == 'POST'
     print('project.submit() form:', form, 'is_valid:', is_valid)
-    if request.method == 'POST' and is_valid:
-        project_dict = {
-            'title': form.title.data,
-            'description': form.description.data,
-            'needed': form.needed.data,
-            'provided': form.provided.data,
-            'user_id': current_user.id
-        }
-        print('project.submit() project_dict:', project_dict)
-        result = mongo.db.projects.insert_one(project_dict)
-        inserted_id = result.inserted_id
-        return redirect(url_for('project.view', project_id=inserted_id))
-    if not is_valid:
-        flash('There was an error with your submission, please try again')
-    return render_template('project/submit.html', form=form)
+    if was_submitted:
+        if is_valid:
+            project_dict = {
+                'title': form.title.data,
+                'description': form.description.data,
+                'needed': form.needed.data,
+                'provided': form.provided.data,
+                'user_id': current_user.id
+            }
+            print('project.submit() project_dict:', project_dict)
+            result = mongo.db.projects.insert_one(project_dict)
+            inserted_id = result.inserted_id
+            return redirect(url_for('project.view', project_id=inserted_id))
+        else:
+            flash('There was an error with your submission, please try again')
+    return render_template(
+        'project/submit.html',
+        form=form,
+        is_invalid=(not is_valid) and was_submitted
+    )
 
 
 @project_blueprint.route('/join/<project_id>/', methods=['GET', 'POST'])
