@@ -67,7 +67,7 @@ def set_invite_user(invite, user_id):
 
 
 @user_blueprint.route('/register/', methods=['GET', 'POST'])
-@user_blueprint.route('/register/<invite_code>', methods=['GET', 'POST'])
+@user_blueprint.route('/register/<invite_code>/', methods=['GET', 'POST'])
 def register(invite_code=None):
     invite = mongo.db.invites.find_one({'invite_code': invite_code})
     if invite_code and ((not invite) or invite['user_id']):
@@ -109,3 +109,12 @@ def register(invite_code=None):
             return redirect(url_for('home.main'))
     else:
         return render_template('user/register.html', invite_code=invite_code)
+
+
+@user_blueprint.route('/view/<user_id>/', methods=['GET'])
+def view(user_id):
+    print('user.view() user_id:', user_id)
+    user = mongo.db.users.find_one({'_id': ObjectId(user_id) })
+    print('user.view() user:', user)
+    projects = mongo.db.projects.find({'user_id': ObjectId(user_id)})
+    return render_template('user/view.html', user=user, projects=projects)

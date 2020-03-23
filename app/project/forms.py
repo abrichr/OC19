@@ -12,6 +12,12 @@ class SubmitProjectForm(FlaskForm):
     provided = TextAreaField(
         'What can you provide? (e.g. time, money, connections, expertise)'
     )
+    contact = TextAreaField(
+        'How should team members collaborate? '
+        '(e.g. organizer\'s email address, '
+        '<a href="https://slack.com/create">Slack</a>, '
+        '<a href="https://trello.com/signup">Trello</a>'
+    )
 
     def validate_title(form, field):
         project = mongo.db.projects.find_one({'title': field.data}) 

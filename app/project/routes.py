@@ -1,4 +1,4 @@
-from flask import flash, render_template, redirect, request, url_for
+from flask import abort, flash, render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 from bson.objectid import ObjectId
 
@@ -22,6 +22,7 @@ def submit():
                 'description': form.description.data,
                 'needed': form.needed.data,
                 'provided': form.provided.data,
+                'contact': form.contact.data,
                 'user_id': current_user.id
             }
             print('project.submit() project_dict:', project_dict)
@@ -89,7 +90,11 @@ def join(project_id):
 def view(project_id):
     print('current_user:', vars(current_user))
     project = mongo.db.projects.find_one({'_id': ObjectId(project_id)})
-    return render_template('project/view.html', project=project)
+    if not project:
+        return abort(404)
+    user_id = project['user_id']
+    owner = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    return render_template('project/view.html', project=project, owner=owner)
 
 
 @project_blueprint.route('/delete/<project_id>/', methods=['POST'])

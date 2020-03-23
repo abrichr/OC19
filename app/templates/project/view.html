@@ -46,12 +46,16 @@ form {
           {{ project.users|length }} user(s)
         </span>
       </div>
+      <dt>Organizer</dt>
+      <dd><a href="{{ url_for('user.view', user_id=owner._id) }}">{{ owner.name }}</a></dd>
       <dt>Description</dt>
       <dd>{{ project.description }}</dd>
-      <dt>Needed</dt>
-      <dd>{{ project.needed }}</dd>
-      <dt>Provided</dt>
-      <dd>{{ project.provided }}</dd>
+      <dt>What is Needed</dt>
+      <dd>{{ project.needed or '-' }}</dd>
+      <dt>What is Provided</dt>
+      <dd>{{ project.provided or '-' }}</dd>
+      <dt>Contact</dt>
+      <dd>{{ project.contact or '-' }}</dd>
       <form
         method="post"
         action="{{ url_for('project.join', project_id=project._id) }}"
