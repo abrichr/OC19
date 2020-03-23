@@ -23,7 +23,8 @@ def submit():
                 'needed': form.needed.data,
                 'provided': form.provided.data,
                 'contact': form.contact.data,
-                'user_id': current_user.id
+                'user_id': current_user.id,
+                'users': [ObjectId(current_user.id)]
             }
             print('project.submit() project_dict:', project_dict)
             result = mongo.db.projects.insert_one(project_dict)
