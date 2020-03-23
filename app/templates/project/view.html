@@ -21,6 +21,14 @@
   <dd>{{ project.needed }}</dd>
   <dt>Provided</dt>
   <dd>{{ project.provided }}</dd>
+  <form
+    method="post"
+    action="{{ url_for('project.join', project_id=project._id) }}"
+  >
+    <button class="btn btn-primary" type="submit">
+      Join
+    </button>
+  </form>
 </div>
 
 {% endblock %}

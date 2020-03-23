@@ -20,6 +20,10 @@
   list-style: none;
 }
 
+.invalid-feedback {
+  display: block;
+}
+
 </style>
 
 {% endblock %}
@@ -34,7 +38,7 @@
   <h2>Submit a Project</h2>
   <form
     id="submit-project"
-    method="POST"
+    method="post"
     action="{{ url_for('project.submit') }}"
   >
     {{ form.csrf_token }}

@@ -7,7 +7,7 @@ from app import mongo
 
 class SubmitProjectForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     needed = TextAreaField('What do you need?')
     provided = TextAreaField(
         'What can you provide? (e.g. time, money, connections, expertise)'

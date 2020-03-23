@@ -8,6 +8,19 @@
 {% endblock %}
 
 
+{% block styles %}
+
+<style>
+
+.project-summaries {
+  margin-top: 40px;
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
 <div class="container">
@@ -17,16 +30,51 @@
         Join the Fight against COVID-19 in Ontario
       </h1>
       <p class="lead">
-        Find problems, join teams, build solutions.
+        Find problems, form teams, build solutions.
       </p>
       {% if current_user.can_create_projects %}
         <a
           href="{{ url_for('project.submit') }}"
           class="btn btn-lg btn-primary"
-          type="submit"
         >
           Submit a Project
         </a>
+      {% endif %}
+      {% if current_user.can_invite_users %}
+        <a
+          href="{{ url_for('admin.invite') }}"
+          class="btn btn-lg btn-warning"
+        >
+          Send an Invite
+        </a>
+      {% endif %}
+      {% if project_views %}
+        <div class="project-summaries">
+          <h3>Projects</h3>
+          {% for project in project_views %}
+            <div class="project-summary">
+              <h3>{{ project.name }}</h3>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    {{ project.title}}
+                  </h5>
+                  <p class="card-text">
+                    {{ project.description }}
+                  </p>
+                  <a
+                    href="{{
+                      url_for('project.view', project_id=project._id)
+                    }}"
+                    class="btn btn-secondary"
+                  >
+                    Open
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
   </div>

@@ -10,6 +10,7 @@ user_blueprint = Blueprint('user', __name__)
 class User(UserMixin):
     def __init__(
         self,
+        _id,
         email,
         name,
         password_hash=None,
@@ -17,6 +18,7 @@ class User(UserMixin):
         can_create_projects=False
     ):
         print('User', locals())
+        self.id = _id
         self.email = email
         self.name = name
         self.password_hash = password_hash
@@ -43,6 +45,7 @@ def load_user(email, user_dict=None):
     if not user_dict:
         return None
     return User(
+        _id=user_dict['_id'],
         email=user_dict['email'],
         name=user_dict['name'],
         can_invite_users=user_dict['can_invite_users'],
