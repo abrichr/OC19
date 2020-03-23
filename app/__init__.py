@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
 
+
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
@@ -36,3 +37,7 @@ def inject_app_name():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
