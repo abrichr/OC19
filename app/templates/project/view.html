@@ -25,14 +25,18 @@
 
 form {
   margin-top: 10px;
+  padding: 0 5px;
+}
+.d-flex .flex-fill:first-of-type form {
+  padding-left: 0;
+}
+.d-flex .flex-fill:last-of-type form {
+  padding-right: 0;
 }
 
 </style>
 
 {% endblock %}
-
-
-{% from "helpers/_formhelpers.html" import render_field %}
 
 
 {% block content %}
@@ -56,28 +60,44 @@ form {
       <dd>{{ project.provided or '-' }}</dd>
       <dt>Contact</dt>
       <dd>{{ project.contact or '-' }}</dd>
-      <form
-        method="post"
-        action="{{ url_for('project.join', project_id=project._id) }}"
-      >
-        <button class="btn btn-primary btn-block" type="submit">
-          {% if current_user.id in project.users %}
-            Leave
-          {% else %}
-            Join
-          {% endif %}
-        </button>
-      </form>
-      {% if current_user.is_superadmin or project._id in current_user.project_ids %}
-        <form
-          method="post"
-          action="{{ url_for('project.delete', project_id=project._id) }}"
-        >
-          <button class="btn btn-danger btn-block" type="submit">
-            Delete
-          </button>
-        </form>
-      {% endif %}
+      <div class="d-flex">
+        <div class="flex-fill">
+          <form
+            method="post"
+            action="{{ url_for('project.join', project_id=project._id) }}"
+          >
+            <button class="btn btn-primary btn-block" type="submit">
+              {% if current_user.id in project.users %}
+                Leave
+              {% else %}
+                Join
+              {% endif %}
+            </button>
+          </form>
+        </div>
+        {% if current_user.is_super_admin or project.user_id == current_user.id %}
+          <div class="flex-fill">
+            <form
+              method="get"
+              action="{{ url_for('project.edit', project_id=project._id) }}"
+            >
+              <button class="btn btn-secondary btn-block" type="submit">
+                Edit
+              </button>
+            </form>
+          </div>
+          <div class="flex-fill">
+            <form
+              method="post"
+              action="{{ url_for('project.delete', project_id=project._id) }}"
+            >
+              <button class="btn btn-danger btn-block" type="submit">
+                Delete
+              </button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>

@@ -21,5 +21,6 @@ class SubmitProjectForm(FlaskForm):
 
     def validate_title(form, field):
         project = mongo.db.projects.find_one({'title': field.data}) 
-        if project:
+        # set in project.routes.edit()
+        if project and str(project['_id']) != form.__dict__.get('_project_id'):
             raise ValidationError('Name already exists')
