@@ -6,6 +6,7 @@ from flask import abort, flash, render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 
 from app import bcrypt, mongo
+from app.bootstrap import maybe_do_bootstrap
 from app.admin import admin_blueprint
 from app.admin.forms import InviteForm
 
@@ -24,21 +25,8 @@ def get_invite_code(size=5):
 # TODO: move to manage.py
 @admin_blueprint.route('/bootstrap', methods=['GET', 'POST'])
 def bootstrap():
-    user = mongo.db.projects.find_one({'can_invite_users': 'true'})
-    print('admin.bootstrap() existing user:', user)
-    if not user:
-        user = mongo.db.users.insert({
-            'email': os.environ['ADMIN_EMAIL'],
-            'name': 'Admin',
-            'password': bcrypt.generate_password_hash(
-                os.environ['ADMIN_PASSWORD']
-            ),
-            'authenticated': False,
-            'can_invite_users': True,
-            'can_create_projects': True
-        })
-        print('admin.bootstrap() inserted user:', user)
-    return redirect(url_for('user.login'))
+    maybe_do_bootstrap()
+    return redirect(url_for('home.main'))
 
 
 def get_invite_views():
