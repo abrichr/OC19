@@ -17,24 +17,22 @@
   <h2>{{ user.name }}</h2>
   <div class="card">
     <div class="card-body">
-      {% if user.can_create_projects %}
-        <dt>Title</dt>
-        <dd>{{ user.title or '-' }}</dd>
-        <dt>Organization</dt>
-        <dd>{{ user.organization or '-' }}</dd>
-        <dt>Projects</dt>
-        <dd>
-          <ul>
-            {% for project in projects %}
-              <li>
-                <a href="{{ url_for('project.view', project_id=project._id) }}">
-                  {{ project.title}}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </dd>
-      {% endif %}
+      <dt>Title</dt>
+      <dd>{{ user.title or '-' }}</dd>
+      <dt>Organization</dt>
+      <dd>{{ user.organization or '-' }}</dd>
+      <dt>Projects</dt>
+      <dd>
+        <ul>
+          {% for project in projects %}
+            <li>
+              <a href="{{ url_for('project.view', project_id=project._id) }}">
+                {{ project.title}}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </dd>
     </div>
   </div>
 </div>

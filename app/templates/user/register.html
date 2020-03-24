@@ -31,7 +31,7 @@
       id="input-name"
       name="input-name"
       class="form-control"
-      placeholder="Name"
+      placeholder="*Name"
       required
       autofocus
     />
@@ -40,7 +40,7 @@
       id="input-email"
       name="input-email"
       class="form-control"
-      placeholder="Email address"
+      placeholder="*Email address"
       required
     />
     <input
@@ -48,31 +48,32 @@
       id="input-password"
       class="form-control"
       name="input-password"
-      placeholder="Password"
+      placeholder="*Password"
       required
     />
-    {% if invite_code %}
-      <input
-        type="text"
-        id="input-title"
-        name="input-title"
-        class="form-control"
-        placeholder="Job Title"
-      />
-      <input
-        type="text"
-        id="input-title"
-        name="input-title"
-        class="form-control"
-        placeholder="Organization"
-      />
-    {% endif %}
+    <input
+      type="text"
+      id="input-title"
+      name="input-title"
+      class="form-control"
+      placeholder="Job Title"
+    />
+    <input
+      type="text"
+      id="input-title"
+      name="input-title"
+      class="form-control"
+      placeholder="Organization"
+    />
+    <p class="small text-center">
+        Fields marked * are required
+    </p>
     <button class="btn btn-lg btn-primary btn-block" type="submit">
       Register
     </button>
   </form>
   <p class="text-center">
-    <a href="{{ url_for('user.login') }}">Click Here to Login</a>
+    <a href="{{ url_for('user.login') }}">Login</a>
   </p>
 
 </div>

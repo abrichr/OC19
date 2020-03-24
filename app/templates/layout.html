@@ -134,9 +134,6 @@ body {
             {{ nav_link('home.main', 'Home') }}
             {% if current_user.is_authenticated %}
               {{ nav_link('user.profile', 'Profile') }}
-              {% if current_user.can_invite_users %}
-                {{ nav_link('admin.invite', 'Invite') }}
-              {% endif %}
               {{ nav_link('user.logout', 'Logout', turbo="false") }}
             {% else %}
               {{ nav_link('user.register', 'Register') }}

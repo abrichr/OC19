@@ -50,30 +50,8 @@ def login():
     return render_template('user/login.html')
 
 
-def set_invite_user(invite, user_id):
-    if not invite:
-        return
-    invite_id = invite['_id']
-    print('admin.set_invite_user() invite_id:', invite_id, 'user_id:', user_id)
-    result = mongo.db.invites.update_one({
-        '_id': ObjectId(invite_id)
-    }, {
-        '$set': {
-            'user_id': user_id
-        }
-    })
-    modified_count = result.modified_count
-    print('set_invite_user() invite modified_count:', modified_count)
-
-
 @user_blueprint.route('/register/', methods=['GET', 'POST'])
-@user_blueprint.route('/register/<invite_code>/', methods=['GET', 'POST'])
-def register(invite_code=None):
-    invite = mongo.db.invites.find_one({'invite_code': invite_code})
-    if invite_code and ((not invite) or invite['user_id']):
-        print('user.register() invalid invite_code:', invite_code)
-        flash('Invalid invite code', 'error')
-        return redirect(url_for('user.register'))
+def register():
     if request.method == 'POST':
         name = request.form['input-name']
         email = request.form['input-email']
@@ -85,22 +63,17 @@ def register(invite_code=None):
             msg = 'User already exists'
             print('register() msg:', msg)
             flash(msg, 'error')
-            return render_template(
-                'user/register.html', invite_code=invite_code
-            )
+            return render_template('user/register.html')
         else:
             user_dict = {
                 'email': email,
                 'name': name,
                 'password': bcrypt.generate_password_hash(password),
                 'authenticated': False,
-                'can_invite_users': False,
-                'can_create_projects': bool(invite_code)
             }
             result = mongo.db.users.insert_one(user_dict)
             user_id = result.inserted_id
             print('register() new user_dict:', user_dict, 'user_id:', user_id)
-            set_invite_user(invite, user_id)
             msg = 'Logged in successfully.'
             print('register() msg', msg)
             flash(msg, 'info')
@@ -108,7 +81,7 @@ def register(invite_code=None):
             login_user(user)
             return redirect(url_for('home.main'))
     else:
-        return render_template('user/register.html', invite_code=invite_code)
+        return render_template('user/register.html')
 
 
 @user_blueprint.route('/view/<user_id>/', methods=['GET'])
@@ -116,5 +89,6 @@ def view(user_id):
     print('user.view() user_id:', user_id)
     user = mongo.db.users.find_one({'_id': ObjectId(user_id) })
     print('user.view() user:', user)
+    # TODO: show projects joined
     projects = mongo.db.projects.find({'user_id': ObjectId(user_id)})
     return render_template('user/view.html', user=user, projects=projects)

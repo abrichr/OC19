@@ -49,14 +49,6 @@
       >
         Submit a Project
       </a>
-      {% if current_user.can_invite_users %}
-        <a
-          href="{{ url_for('admin.invite') }}"
-          class="btn btn-lg btn-warning"
-        >
-          Send an Invite
-        </a>
-      {% endif %}
       {% if project_views %}
         <div class="project-summaries">
           <h3>Projects</h3>

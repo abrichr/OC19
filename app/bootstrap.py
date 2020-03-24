@@ -4,7 +4,7 @@ from app import bcrypt, mongo
 
 
 def maybe_do_bootstrap():
-    user = mongo.db.users.find_one({'can_invite_users': True})
+    user = mongo.db.users.find_one({'is_superadmin': True})
     print('maybe_do_bootstrap() existing user:', user)
     admin_email = os.environ.get('ADMIN_EMAIL')
     admin_password = os.environ.get('ADMIN_PASSWORD')
@@ -20,8 +20,6 @@ def do_bootstrap(admin_email, admin_password):
         # XXX TODO: salt
         'password': bcrypt.generate_password_hash(admin_password),
         'authenticated': False,
-        'can_invite_users': True,
-        'can_create_projects': True,
         'is_superadmin': True
     })
     print('do_bootstrap() inserted user:', user)
@@ -56,19 +54,4 @@ def do_bootstrap(admin_email, admin_password):
         print(
             'do_bootstrap() inserted project:', project,
             'project_id:', project_id
-        )
-    invites = [
-        {
-            'invite_code': 'dZqFs',
-            'user_id': user_id_by_email['obenfine@gmail.com'],
-        },
-        {
-            'invite_code': 'b9SwW',
-            'user_id': user_id_by_email['pz.cehn@mail.utoronto.ca']
-        }
-    ]
-    for invite in invites:
-        invite_id = mongo.db.invites.insert_one(invite)
-        print(
-            'do_bootstrap() inserted invite:', invite, 'invite_id:', invite_id
         )

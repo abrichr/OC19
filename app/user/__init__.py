@@ -15,19 +15,15 @@ class User(UserMixin):
         email,
         name,
         password_hash=None,
-        can_invite_users=False,
-        can_create_projects=False
+        is_superadmin=False
     ):
         print('User', locals())
         self.id = _id
         self.email = email
         self.name = name
         self.password_hash = password_hash
-        self.can_invite_users = can_invite_users
-        self.can_create_projects = can_create_projects
         self.project_ids = self._get_project_ids()
-        # TODO: set this separately
-        self.is_superadmin = can_invite_users
+        self.is_superadmin = is_superadmin
 
     @staticmethod
     def is_authenticated(self):
@@ -41,8 +37,7 @@ class User(UserMixin):
         return bcrypt.check_password_hash(password_hash, password)
 
     def can_edit_project(project_id):
-        # TODO: add separate permission for admin
-        return self.can_invite_users or project_id in self.project_ids
+        return self.is_superadmin or project_id in self.project_ids
 
     def _get_project_ids(self):
         project_ids = set()
@@ -67,8 +62,7 @@ def load_user(email, user_dict=None):
         _id=user_dict['_id'],
         email=user_dict['email'],
         name=user_dict['name'],
-        can_invite_users=user_dict['can_invite_users'],
-        can_create_projects=user_dict['can_create_projects'],
+        is_superadmin=user_dict['is_superadmin'],
         password_hash=user_dict['password']
     )
 
