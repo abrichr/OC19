@@ -1,0 +1,7 @@
+- flask-mongoengine
+- flask-security-too
+- flask-admin
+- file upload
+- publish/hide projects
+- edit/delete own project
+- edit own profile
