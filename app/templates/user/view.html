@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}
+
+- {{ user.name }}
+
+{% endblock %}
+
+
+{% from "helpers/_formhelpers.html" import render_field %}
+
+
+{% block content %}
+
+<div class="container">
+  <h2>{{ user.name }}</h2>
+  <div class="card">
+    <div class="card-body">
+      {% if user.can_create_projects %}
+        <dt>Title</dt>
+        <dd>{{ user.title or '-' }}</dd>
+        <dt>Organization</dt>
+        <dd>{{ user.organization or '-' }}</dd>
+        <dt>Projects</dt>
+        <dd>
+          <ul>
+            {% for project in projects %}
+              <li>
+                <a href="{{ url_for('project.view', project_id=project._id) }}">
+                  {{ project.title}}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </dd>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
