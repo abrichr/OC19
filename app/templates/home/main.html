@@ -43,14 +43,12 @@
       <p class="lead">
         Find problems, form teams, build solutions.
       </p>
-      {% if current_user.can_create_projects %}
-        <a
-          href="{{ url_for('project.submit') }}"
-          class="btn btn-lg btn-primary"
-        >
-          Submit a Project
-        </a>
-      {% endif %}
+      <a
+        href="{{ url_for('project.submit') }}"
+        class="btn btn-lg btn-primary"
+      >
+        Submit a Project
+      </a>
       {% if current_user.can_invite_users %}
         <a
           href="{{ url_for('admin.invite') }}"
