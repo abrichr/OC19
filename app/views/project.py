@@ -122,7 +122,7 @@ def edit(project_id):
 
     # XXX HACK
     # read in project.forms.SubmitProjectForm.validate_title()
-    form._project_id = project_id
+    form._project_id = int(project_id)
 
     was_submitted = request.method == 'POST'
     print('project.edit() form:', form, 'was_submitted:', was_submitted)
