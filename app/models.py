@@ -38,6 +38,18 @@ class User(db.Model, UserMixin):
     confirmation = db.Column(db.Boolean)
     is_superadmin = db.Column(db.Boolean)
     _password = db.Column(db.String)
+    created_timestamp = db.Column(
+        db.TIMESTAMP,
+        info=info('Created Timestamp'),
+        default=func.now()
+    )
+    edited_timestamp = db.Column(
+        db.TIMESTAMP,
+        info=info('Edited Timestamp'),
+        server_default=func.now(),
+        onupdate=func.now()
+    )
+
     projects_created = db.relationship('Project', cascade='all,delete')
     projects_joined = db.relationship(
         'Project',
@@ -46,18 +58,6 @@ class User(db.Model, UserMixin):
         backref=db.backref('users_joined'),
         cascade='all,delete'
     )
-    created_timestamp = db.Column(
-        db.TIMESTAMP,
-        info=info('Created'),
-        default=func.now()
-    )
-    edited_timestamp = db.Column(
-        db.TIMESTAMP,
-        info=info('Edted'),
-        server_default=func.now(),
-        onupdate=func.now()
-    )
-
     @property
     def full_name(self):
         return '{} {}'.format(self.first_name, self.last_name)
@@ -151,12 +151,12 @@ class Project(db.Model):
     )
     created_timestamp = db.Column(
         db.TIMESTAMP,
-        info=info('Created'),
+        info=info('Created Timestamp'),
         default=func.now()
     )
     edited_timestamp = db.Column(
         db.TIMESTAMP,
-        info=info('Edted'),
+        info=info('Edited Timestamp'),
         server_default=func.now(),
         onupdate=func.now()
     )

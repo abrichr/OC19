@@ -54,6 +54,9 @@ def submit():
 def view(project_id):
     project = Project.query.filter_by(id=project_id).first()
     columns = [c for c in inspect(Project).columns]
+
+    # XXX hack
+    # TODO: figureout how to do this with wtforms_alchemy
     field_by_key = {
         column.key: {
             'label': column.info.get('label'),
@@ -61,7 +64,9 @@ def view(project_id):
         }
         for column in inspect(Project).columns
         if not column.key.endswith('id')
+        and not 'timestamp' in column.key
     }
+
     return render_template(
         'project/view.html',
         title=project.title,
