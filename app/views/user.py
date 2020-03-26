@@ -120,7 +120,10 @@ def forgot():
             # Send the email to user
             email.send(user.email, subject, html)
             # Send back to the home page
-            flash('Check your emails to reset your password.', 'positive')
+            flash(
+                'Please check your email to reset your password.',
+                'positive'
+            )
             return redirect(url_for('index'))
         else:
             flash('Unknown email address.', 'negative')
