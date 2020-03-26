@@ -108,7 +108,8 @@ def edit(project_id):
         return redirect(url_for('projectbp.list'))
 
     if not (
-        current_user.is_superadmin or current_user in project.create_by_user
+        current_user.is_superadmin or
+        current_user.id == project.created_by_user_id
     ):
         flash('You don\'t have permission to do that')
         return redirect(url_for('projectbp.view', project_id=project_id))
