@@ -9,4 +9,4 @@ CMD gunicorn -b 0.0.0.0:$PORT \
     #--access-logfile /var/log/gunicorn-access.log \
     #--error-logfile /var/log/gunicorn-error.log \
     app:app \
-    --log-level DEBUG
+    --log-level "$LOG_LEVEL"
