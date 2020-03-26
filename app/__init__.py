@@ -63,7 +63,11 @@ def load_user(email):
 
 @login_manager.unauthorized_handler
 def handle_needs_login():
-    flash('You have to be logged in to access this page.' + request.path)
+    flash(
+        'You have to be logged in to access the page at {}'.format(
+            request.path
+        )
+    )
     return redirect(url_for('userbp.signin', next=request.path))
 
 
