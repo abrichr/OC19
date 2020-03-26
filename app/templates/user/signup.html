@@ -12,6 +12,10 @@
         {{ m.render_field(form.confirm) }}
         {{ form.csrf_token }}
         <button class="ui primary button" type="submit">Submit</button>
+        <p class="login-hint">
+          Already have an account?
+          <a href="{{ url_for('userbp.signin') }}">Login</a>
+        </p>
     </form>
   </div>
 
