@@ -1,6 +1,7 @@
 # OnCOVID-19
 
-This repo contains the code for the oncovid19.com website.
+This repo contains the code for the [oncovid19.com](http://oncovid19.com)
+website.
 
 In the below, replace 'dev' with 'prod' for production environments.
 
@@ -9,8 +10,7 @@ In the below, replace 'dev' with 'prod' for production environments.
 ```
 pip install -r requirements
 echo 'SQLALCHEMY_DATABASE_URI=<database_uri>' >> .env_dev
-echo 'MAIL_PASSWORD' >> .env_dev
-# for sending email
+# for sending email confirmations
 echo 'MAIL_PASSWORD' >> .env_dev
 ```
 
