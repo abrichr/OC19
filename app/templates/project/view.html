@@ -33,7 +33,6 @@ textarea {
 
 <div class="ui container segment">
   <h2>{{ project.title }}</h2>
-  <div class="ui card fluid">
     <div class="content">
       <div class="num-users">
         <p>
@@ -54,21 +53,18 @@ textarea {
       </div>
       <div class="ui divider"></div>
       {% for key, field in field_by_key.items() %}
-        <div class="field">
-          <div class="ui aligned three column stackable grid">
-            <div class="ui four wide column">
-              <strong>
-                {{ field['label'] }}
-              </strong>
-            </div>
-            <div class="eight wide column">
-              {{ field['data'] or '-' }}
-            </div>
+        <div class="ui aligned four wide stackable grid">
+          <div class="ui four wide column">
+            <strong>
+              {{ field['label'] }}
+            </strong>
+          </div>
+          <div class="eight wide column">
+            {{ field['data'] or '-' }}
           </div>
         </div>
         <div class="ui divider"></div>
       {% endfor %}
-      <div class="ui divider"></div>
       <div id="project-actions">
         <form
           method="post"
@@ -108,7 +104,6 @@ textarea {
         {% endif %}
       </div>
     </div>
-  </div>
 </div>
 
 {% endblock %}

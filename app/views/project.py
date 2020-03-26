@@ -39,7 +39,7 @@ def submit():
         else:
             flash(
                 'There was an error with your submission, please try again',
-                'negative'
+                'error'
             )
 
     return render_template(
@@ -65,6 +65,7 @@ def view(project_id):
         for column in inspect(Project).columns
         if not column.key.endswith('id')
         and not 'timestamp' in column.key
+        and not 'title' in column.key
     }
 
     return render_template(

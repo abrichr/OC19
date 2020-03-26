@@ -23,7 +23,7 @@
   margin-bottom: 30px;
 }
 .masthead .buttons {
-  margin-top: 40px;
+  margin-top: 30px;
 }
 .masthead .buttons .button {
   width: 80%;
@@ -31,6 +31,25 @@
 .masthead p {
   margin: 0;
 }
+.masthead {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-image: url('/static/img/bg.jpg') !important;
+  background-color: black;
+  background-size: cover !important;
+  background-position: 50% 70% !important;
+  background-repeat: no-repeat !important;
+
+}
+
+.readable
+{
+  background: rgba(0,0,0,0.7);
+  border-radius: 5px;
+  padding: 1px 0 40px;
+}
+
 
 </style>
 
@@ -39,41 +58,43 @@
 
 {% block content %}
 <div class="ui inverted vertical masthead center aligned segment masthead">
-  <div class="ui text container" >
-    <h1 class="ui inverted header">
-      Join the Fight against COVID-19
-    </h1>
-    <h2>Find problems, form teams, build solutions.</h2>
-    <p>
-      We are a community of
-      <strong>engineers</strong>
-      and
-      <strong>clinicians</strong>
-      .
-    </p>
-    <p>
-      Our mission is to
-      <u>#FlattenTheCurve</u>
-      in Ontario.
-    </p>
-    <div class="buttons">
-      <div class="ui stackable two column grid">
-        <div class="ui row">
-          <div class="ui column">
-            <a href="{{ url_for('projectbp.list') }}">
-              <div class="ui huge primary button">
-                See All Projects
-                <i class="right arrow icon"></i>
-              </div>
-            </a>
-          </div>
-          <div class="ui column">
-            <a href="{{ url_for('projectbp.submit') }}">
-              <div class="ui huge button">
-                Submit A Project
-                <i class="right arrow icon"></i>
-              </div>
-            </a>
+  <div class="ui text container">
+    <div class="readable">
+      <h1 class="ui inverted header">
+        Join the Fight against <br/>COVID-19
+      </h1>
+      <h2>Find problems, form teams, build solutions.</h2>
+      <p>
+        We are a community of
+        <strong>engineers</strong>
+        and
+        <strong>clinicians</strong>
+        .
+      </p>
+      <p>
+        Our mission is to
+        <u>#FlattenTheCurve</u>
+        in Ontario.
+      </p>
+      <div class="buttons">
+        <div class="ui stackable two column grid">
+          <div class="ui row">
+            <div class="ui column">
+              <a href="{{ url_for('projectbp.list') }}">
+                <div class="ui huge primary button">
+                  See All Projects
+                  <i class="right arrow icon"></i>
+                </div>
+              </a>
+            </div>
+            <div class="ui column">
+              <a href="{{ url_for('projectbp.submit') }}">
+                <div class="ui huge button">
+                  Submit A Project
+                  <i class="right arrow icon"></i>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import os
 from pprint import pformat
 
 from flask import Flask, flash, redirect, request, url_for
+from flask_toastr import Toastr
 
 
 app = Flask(__name__)
@@ -21,6 +22,7 @@ logger.warning('is_debug: {}'.format(is_debug))
 app.debug = is_debug
 logger.warning('*' * 40)
 
+toastr = Toastr(app)
 
 # Setup the database
 from flask_sqlalchemy import SQLAlchemy
@@ -69,6 +71,22 @@ def handle_needs_login():
         )
     )
     return redirect(url_for('userbp.signin', next=request.path))
+
+@app.context_processor
+def inject_is_active_route():
+    from pprint import pprint
+    pprint(vars(request))
+    is_active_route = True
+    return dict(is_active_route=is_active_route)
+
+@app.context_processor
+def inject_is_active_route():
+    def is_active_route(endpoint):
+        return (
+            request.url_rule.endpoint == endpoint
+            if request.url_rule else None
+        )
+    return dict(is_active_route=is_active_route)
 
 
 from app import admin

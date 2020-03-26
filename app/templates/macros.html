@@ -1,13 +1,8 @@
 {# myapp/templates/macros.html #}
 
-<!-- Highlight the current tab -->
 {% macro nav_link(endpoint, text) %}
-  {% if request.endpoint is not none %}
-    {% if request.endpoint.startswith(endpoint.split('.')[0]) %}
-        <a class="active teal item" href="{{ url_for(endpoint) }}">{{ text }}</a>
-    {% else %}
-        <a class="item" href="{{ url_for(endpoint) }}">{{ text }}</a>
-    {% endif %}
+  {% if is_active_route(endpoint) and endpoint != 'index' %}
+      <a class="active item" href="{{ url_for(endpoint) }}">{{ text }}</a>
   {% else %}
       <a class="item" href="{{ url_for(endpoint) }}">{{ text }}</a>
   {% endif %}
@@ -27,28 +22,17 @@
     }}
   </div>
   {% if field.errors %}
-  <ul>
-    {% for error in field.errors %}
-      <li class="form-error">{{ error }}</li>
-    {% endfor %}
-  </ul>
+    <ul>
+      {% for error in field.errors %}
+        <li class="form-error">{{ error }}</li>
+      {% endfor %}
+    </ul>
   {% endif %}
 {% endmacro %}
 
 
 {% macro render_expanded_field(field) %}
   <style>
-  /* from https://stackoverflow.com/a/43620949/95989 */
-  @media only screen and (max-width: 767px) {
-  .ui.stackable.grid > .column:not(.row) {
-    padding: 3px !important;
-  }
-  .ui.stackable.grid > .column:first-child {
-    padding-top: 1rem !important;
-  }
-  .ui.stackable.grid > .column:last-child {
-    padding-bottom: 1rem !important;
-  }
   </style>
   <div class="field">
     <div class="ui aligned three column stackable grid">

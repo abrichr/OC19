@@ -1,56 +1,101 @@
-<!DOCTYPE html> {% import "macros.html" as m %}
+<!DOCTYPE html>
+{% import "macros.html" as m with context %}
 <html lang="en">
-
 
 <style>
 
-/* Layout */
+/* from https://stackoverflow.com/a/43620949/95989 */
+@media only screen and (max-width: 767px) {
+  .ui.stackable.grid > .column:not(.row) {
+    padding: 3px !important;
+  }
+  .ui.stackable.grid > .column:first-child {
+    padding-top: 1rem !important;
+  }
+  .ui.stackable.grid > .column:last-child {
+    padding-bottom: 1rem !important;
+  }
+}
 
-#container {
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: grayscale;
+}
+
+#sidebar {
+  position: fixed;
+  height: 100vh;
+  background-color: #f5f5f5;
+  padding-top: 68px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#sidebar .ui.menu > a.item {
+  padding: 10px 20px;
+  line-height: 20px;
+  color: #337ab7;
+  border-radius: 0 !important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#sidebar .ui.menu > a.item.active {
+  background-color: #337ab7;
+  color: white;
+  border: none !important;
+}
+
+#sidebar .ui.menu > a.item:hover {
+  background-color: #eee;
+  color: #23527c;
+}
+
+#content {
+  margin-top: 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+#index #content {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.ui.centered.small.circular.image {
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.ui.borderless.menu {
+  box-shadow: none;
+  flex-wrap: wrap;
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.ui.mobile.only.grid .ui.menu .ui.vertical.menu {
+  display: none;
+}
+
+body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
 
-#header-and-body {
-  flex: 1;
-  flex-direction: column;
-  display: flex;
-}
-
-#navbar > a {
-  border-radius: 0;
-}
-
-#body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 20px 0;
-}
-body.body-index #body {
-  padding: 0 !important;
-}
-.masthead {
-  flex: 1;
-}
-
 #footer {
+  background: #1b1c1d;
+  padding: 10px;
   text-align: center;
-  padding: 13px 0;
-  background: #1B1C1D;
-  border-top: 1px solid #333 !important;
 }
-
-#navbar {
-  margin: 0;
-  border-radius: 0;
-  border-bottom: 1px solid #333;
-}
-
 /* Forms */
-
-/* TODO: vertical align using flexbox */
 
 /* TODO: put this somewhere else */
 
@@ -60,35 +105,8 @@ body.body-index #body {
   margin-bottom: 0 !important;
 }
 
-.form-user {
-   width: 33% !important;
-   margin: 0 auto !important;
-   //margin-top: 10% !important;
-}
-
 .form-error {
    color: #E50000 !important;
-}
-
-/* Flask flashes */
-
-#flashes {
-  margin: 0;
-  padding: 20px;
-}
-#flashes.dark {
-  background: #1B1C1D;
-}
-#flashes li {
-  margin: 0;
-  list-style: none;
-  text-align: center;
-}
-
-/* Errors */
-
-.error-box {
-   margin-top: 8%;
 }
 
 </style>
@@ -114,83 +132,65 @@ body.body-index #body {
   <meta charset="UTF-8">
   <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" /-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.css" />
-  <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/components/reset.min.css" /-->
-  <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/components/menu.min.css" /-->
   <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist/semantic.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
   <title>{{ title }}</title>
+
   {% endblock %}
+
+  {{ toastr.include_jquery() }}
+  {{ toastr.include_toastr_css() }}
+  {{ toastr.message() }}
+
 </head>
 
-<body id="container" class="body-{{ request.endpoint }}">
-  <div id="header-and-body">
-  <div id="header">
-    <!-- Navbar -->
-    <div id="navbar" class="ui inverted menu">
+<body id="{{ request.endpoint }}">
+  <div class="ui tablet computer only padded grid">
+    <div class="ui inverted borderless top fixed fluid menu">
       {{ m.nav_link('index', 'OnCOVID19') }}
-      {{ m.nav_link('projectbp.list', 'Projects') }}
-      <div class="ui right inverted menu">
+      <div class="right menu">
+	{{ m.nav_link('projectbp.list', 'Projects') }}
         {% if current_user.is_authenticated %}
-          <div class="item">
-            <a class="ui primary button" href="{{ url_for('userbp.account') }}">
-              {{ current_user.full_name }}
-            </a>
-          </div>
-          <div class="item">
-            <a class="ui default button" href="{{
-              url_for('userbp.signout', next=request.path)
-            }}">
-              Sign out
-            </a>
-          </div>
+          {{ m.nav_link('userbp.account', 'Profile') }}
+          {{ m.nav_link('userbp.signout', 'Sign Out') }}
         {% else %}
-          <div class="item">
-            <a class="ui primary button" href="{{
-              url_for('userbp.signin', next=request.path)
-            }}">
-              Sign in
-            </a>
-          </div>
-          <div class="item">
-            <a class="ui default button" href="{{
-              url_for('userbp.signup', next=request.path)
-            }}">
-              Sign up
-            </a>
-          </div>
+          {{ m.nav_link('userbp.signin', 'Sign In') }}
+          {{ m.nav_link('userbp.signup', 'Sign Up') }}
         {% endif %}
       </div>
     </div>
   </div>
-  <!-- Message flashing -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul
-        id="flashes"
-        class="{{ 'dark' if request.endpoint == 'index' else '' }}"
-      >
-        {% for category, message in messages %}
-          <li
-            class="
-                ui {{ category }} message flash
-                {{ 'black' if request.endpoint == 'index' else '' }}
-            "
-          >
-            {{ message }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-  <div id="body" class="body">
+  <div class="ui mobile only padded grid">
+    <div class="ui top fixed borderless fluid inverted menu">
+      {{ m.nav_link('index', 'OnCOVID19') }}
+      <div class="right menu">
+	<div class="item">
+	  <button class="ui icon toggle basic inverted button">
+	    <i class="content icon"></i>
+	  </button>
+	</div>
+      </div>
+      <div class="ui vertical borderless inverted fluid menu">
+	{{ m.nav_link('projectbp.list', 'Projects') }}
+        {% if current_user.is_authenticated %}
+          {{ m.nav_link('userbp.account', 'Profile') }}
+          {{ m.nav_link('userbp.signout', 'Sign Out') }}
+        {% else %}
+          {{ m.nav_link('userbp.signin', 'Sign In') }}
+          {{ m.nav_link('userbp.signup', 'Sign Up') }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="sixteen wide column" id="content">
     {% block content %}
     {% endblock %}
   </div>
-  </div>
   <div id="footer">
-    <div class="ui inverted divided horizontal footer link list">
+    <div class="ui divided inverted horizontal footer link list">
       <div class="item">
         Made in Toronto
       </div>
@@ -201,6 +201,17 @@ body.body-index #body {
       </div>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(".ui.toggle.button").click(function() {
+	$(".mobile.only.grid .ui.vertical.menu").toggle(100);
+      });
+    });
+  </script>
+
+  {{ toastr.include_toastr_js() }}
 
   <script>
     if (
