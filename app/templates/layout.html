@@ -187,7 +187,10 @@ body.body-index #body {
   </div>
 
   <script>
-    if (window.location.href.includes('herokuapp')) {
+    if (
+      window.location.href.includes('herokuapp') &&
+      !window.location.href.includes('dev')
+    ) {
       window.location.href = 'http://www.oncovid19.com/'
     }
   </script>
