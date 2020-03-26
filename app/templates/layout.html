@@ -127,6 +127,7 @@ body.body-index #body {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
   <!-- Browser tab name -->
   <title>{{ title }}</title>
+  {% endblock %}
 </head>
 
 <body id="container" class="body-{{ request.endpoint }}">
@@ -168,7 +169,6 @@ body.body-index #body {
         {% endif %}
       </div>
     </div>
-    {% endblock %}
   </div>
   <!-- Message flashing -->
   {% with messages = get_flashed_messages(with_categories=true) %}
