@@ -11,8 +11,6 @@ fi
     #--error-logfile /var/log/gunicorn-error.log \
 
 
-# XXX remove
-
-gunicorn -b 0.0.0.0:8080 \
+gunicorn -b 0.0.0.0:$PORT \
     app:app \
     --log-level "$LOG_LEVEL"
