@@ -15,6 +15,13 @@ textarea {
   display: inline-block;
 }
 
+.num-users .label {
+  margin-bottom: 5px;
+}
+.num-users span.ui.meta {
+  margin-right: 5px;
+}
+
 
 
 </style>
@@ -30,7 +37,9 @@ textarea {
     <div class="content">
       <div class="num-users">
         <p>
-          {{ project.users_joined|length }} user(s):
+          <span class="ui meta">
+            {{ project.users_joined|length }} user(s):
+          </span>
           {% for user in project.users_joined %}
             <a
               href="{{
@@ -46,17 +55,18 @@ textarea {
       <div class="ui divider"></div>
       {% for key, field in field_by_key.items() %}
         <div class="field">
-          <div class="ui aligned three column grid">
-            <div class="ui four wide column right">
-              <div class="ui basic label large right floated">
+          <div class="ui aligned three column stackable grid">
+            <div class="ui four wide column">
+              <strong>
                 {{ field['label'] }}
-              </div>
+              </strong>
             </div>
             <div class="eight wide column">
               {{ field['data'] or '-' }}
             </div>
           </div>
         </div>
+        <div class="ui divider"></div>
       {% endfor %}
       <div class="ui divider"></div>
       <div id="project-actions">
