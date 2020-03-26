@@ -12,7 +12,7 @@
   min-height: 500px;
 }
 .masthead h1.ui.header {
-  margin-top: 2em;
+  margin-top: .5em;
   margin-bottom: 0em;
   font-size: 4em;
   font-weight: normal;
@@ -20,7 +20,17 @@
 .masthead h2 {
   font-size: 1.7em;
   font-weight: normal;
-  margin-bottom: 2em;
+  margin-bottom: 30px;
+}
+.masthead .buttons {
+  margin-top: 40px;
+}
+.masthead .buttons p {
+  margin: 0;
+}
+.masthead code {
+  padding: 0 10px;
+  font-weight: normal;
 }
 
 </style>
@@ -35,18 +45,28 @@
       Join the Fight against COVID-19
     </h1>
     <h2>Find problems, form teams, build solutions.</h2>
-    <a href="{{ url_for('projectbp.list') }}">
-      <div class="ui huge primary button">
-        See All Projects
-        <i class="right arrow icon"></i>
-      </div>
-    </a>
-    <a href="{{ url_for('projectbp.submit') }}">
-      <div class="ui huge button">
-        Submit A Project
-        <i class="right arrow icon"></i>
-      </div>
-    </a>
+    <h3>
+      We are a community of scientists, engineers, clinicians and
+      healthcare administrators.
+    </h3>
+    <h3>
+      Our mission is to <code>#FlattenTheCurve</code> of COVID-19 infections
+      in Ontario.
+    </h3>
+    <div class="buttons">
+      <a href="{{ url_for('projectbp.list') }}">
+        <div class="ui huge primary button">
+          See All Projects
+          <i class="right arrow icon"></i>
+        </div>
+      </a>
+      <a href="{{ url_for('projectbp.submit') }}">
+        <div class="ui huge button">
+          Submit A Project
+          <i class="right arrow icon"></i>
+        </div>
+      </a>
+    </div>
   </div>
 </div>
 
