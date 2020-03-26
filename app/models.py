@@ -63,6 +63,9 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.email
 
+    def __repr__(self):
+        return 'User {}: {}'.format(self.id, self.full_name)
+
 
 def info(label, description=None):
     return {'label': label, 'description': description}
@@ -145,3 +148,5 @@ class Project(db.Model):
         info=info('Created At')
     )
     '''
+    def __repr__(self):
+        return 'Project {}: {}'.format(self.id, self.title)
