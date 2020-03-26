@@ -14,7 +14,7 @@ app.config.from_object('app.config')
 from app.logger_setup import logger
 
 logger.warning('*' * 40)
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG', 0)
 logger.warning('DEBUG: {}'.format(DEBUG))
 is_debug = bool(int(DEBUG))
 logger.warning('is_debug: {}'.format(is_debug))
