@@ -1,9 +1,14 @@
+import os
 from pprint import pformat
 
 from flask import Flask, flash, redirect, request, url_for
 
 
 app = Flask(__name__)
+
+is_debug = bool(int(os.environ.get('DEBUG')))
+print('is_debug:', is_debug)
+app.debug = is_debug
 
 # Setup the app with the config.py file
 app.config.from_object('app.config')
