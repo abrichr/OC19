@@ -1,27 +1,14 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 
 
-{% block title %}
+{% block head %}
 
-- Submit Project 
-
-{% endblock %}
-
-
-{% block styles %}
+{{ super() }}
 
 <style>
 
-#submit-project ul {
-  margin: 0;
-  padding: 0;
-}
-#submit-project ul li {
-  list-style: none;
-}
-
-.invalid-feedback {
-  display: block;
+textarea {
+  height: 6em !important;
 }
 
 </style>
@@ -29,30 +16,45 @@
 {% endblock %}
 
 
-{% from "helpers/_formhelpers.html" import render_field %}
-
-
 {% block content %}
 
-<div class="container">
-  <h2>{{ title }} Project</h2>
+<div class="ui container segment">
   <form
-    id="submit-project"
-    method="post"
+    class="ui form fluid"
     action="{{
       url_for(
-        'project.{}'.format(action),
-        project_id=project['_id'] if project else None
+        'projectbp.{}'.format(action),
+        project_id=project.id if project else None
       )
     }}"
+    method="post"
   >
+    <h2 class="ui header">
+      {{ 'Edit' if project and project.id else 'Submit' }} Project
+    </h2>
+    <!--div class="ui ignored positive icon message"-->
+    <span class="meta">
+      This information will be public.
+    </span>
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.title) }}
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.description) }}
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.needed) }}
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.provided) }}
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.contact) }}
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.budget) }}
+    <div class="ui divider"></div>
+    {{ m.render_expanded_field(form.decision_making) }}
     {{ form.csrf_token }}
-    {{ render_field(form.title, is_invalid) }}
-    {{ render_field(form.description, is_invalid) }}
-    {{ render_field(form.needed, is_invalid) }}
-    {{ render_field(form.provided, is_invalid) }}
-    {{ render_field(form.contact, is_invalid) }}
-    <button class="btn btn-primary" type="submit">
+    <button
+      class="ui primary button"
+      type="submit"
+    >
       Submit
     </button>
   </form>

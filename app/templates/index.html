@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+
+{% block head %}
+
+{{ super() }}
+
+<style>
+
+.masthead.segment {
+  border-radius: 0;
+  min-height: 500px;
+}
+.masthead h1.ui.header {
+  margin-top: 2em;
+  margin-bottom: 0em;
+  font-size: 4em;
+  font-weight: normal;
+}
+.masthead h2 {
+  font-size: 1.7em;
+  font-weight: normal;
+  margin-bottom: 2em;
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="ui inverted vertical masthead center aligned segment masthead">
+  <div class="ui text container" >
+    <h1 class="ui inverted header">
+      Join the Fight against COVID-19
+    </h1>
+    <h2>Find problems, form teams, build solutions.</h2>
+    <a href="{{ url_for('projectbp.list') }}">
+      <div class="ui huge primary button">
+        See All Projects
+        <i class="right arrow icon"></i>
+      </div>
+    </a>
+    <a href="{{ url_for('projectbp.submit') }}">
+      <div class="ui huge button">
+        Submit A Project
+        <i class="right arrow icon"></i>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!--div class="container">
+</div-->
+
+{% endblock %}

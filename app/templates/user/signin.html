@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="ui form-user center raised very padded text container segment">
+    <form
+      class="ui form"
+      action="{{
+        url_for('userbp.signin', next=request.args.get('next', 'index'))
+      }}"
+      method="post"
+    >
+      <h4 class="ui dividing header">
+        Login
+      </h4>
+      {{ m.render_field(form.email) }}
+      {{ m.render_field(form.password) }}
+      {{ form.csrf_token }}
+      <button class="ui primary button" type="submit">Confirm</button>
+      <a href="{{ url_for('userbp.forgot') }}">
+        <div class="ui floated right basic red button">
+            I forgot my password
+        </div>
+      </a>
+    </form>
+  </div>
+
+{% endblock %}

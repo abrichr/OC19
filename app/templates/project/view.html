@@ -1,38 +1,21 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
 
 
-{% block title %}
+{% block head %}
 
-- {{ project.name }}
-
-{% endblock %}
-
-
-{% block css %}
-
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{{ url_for('static', filename='css/projects.css') }}"
-/>
-
-{% endblock %}
-
-
-{% block styles %}
+{{ super() }}
 
 <style>
 
-form {
-  margin-top: 10px;
-  padding: 0 5px;
+textarea {
+  height: 6em !important;
 }
-.d-flex .flex-fill:first-of-type form {
-  padding-left: 0;
+
+#project-actions form {
+  display: inline-block;
 }
-.d-flex .flex-fill:last-of-type form {
-  padding-right: 0;
-}
+
+
 
 </style>
 
@@ -41,61 +24,77 @@ form {
 
 {% block content %}
 
-<div class="container">
+<div class="ui container segment">
   <h2>{{ project.title }}</h2>
-  <div class="card">
-    <div class="card-body">
+  <div class="ui card fluid">
+    <div class="content">
       <div class="num-users">
-        <span class="badge badge-dark">
-          {{ project.users|length }} user(s)
-        </span>
+        <p>
+          {{ project.users_joined|length }} user(s):
+          {% for user in project.users_joined %}
+            <a
+              href="{{
+                url_for('userbp.view', user_id=user.id )
+              }}"
+              class="ui label"
+            >
+              {{ user.full_name }}
+            </a>
+          {% endfor %}
+        </p>
       </div>
-      <dt>Organizer</dt>
-      <dd><a href="{{ url_for('user.view', user_id=owner._id) }}">{{ owner.name }}</a></dd>
-      <dt>Description</dt>
-      <dd>{{ project.description }}</dd>
-      <dt>What is Needed</dt>
-      <dd>{{ project.needed or '-' }}</dd>
-      <dt>What is Provided</dt>
-      <dd>{{ project.provided or '-' }}</dd>
-      <dt>Contact</dt>
-      <dd>{{ project.contact or '-' }}</dd>
-      <div class="d-flex">
-        <div class="flex-fill">
+      <div class="ui divider"></div>
+      {% for key, field in field_by_key.items() %}
+        <div class="field">
+          <div class="ui aligned three column grid">
+            <div class="ui four wide column right">
+              <div class="ui basic label large right floated">
+                {{ field['label'] }}
+              </div>
+            </div>
+            <div class="eight wide column">
+              {{ field['data'] or '-' }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="ui divider"></div>
+      <div id="project-actions">
+        <form
+          method="post"
+          action="{{ url_for('projectbp.join', project_id=project.id) }}"
+        >
+          <button class="ui primary button" type="submit">
+            {% if current_user in project.users_joined %}
+              Leave
+            {% else %}
+              Join
+            {% endif %}
+            <i class="right arrow icon"></i>
+          </button>
+        </form>
+        {%
+          if current_user.is_superadmin or
+          project.created_by_user_id == current_user.id
+        %}
           <form
-            method="post"
-            action="{{ url_for('project.join', project_id=project._id) }}"
+            method="get"
+            action="{{ url_for('projectbp.edit', project_id=project.id) }}"
           >
-            <button class="btn btn-primary btn-block" type="submit">
-              {% if current_user.id in project.users %}
-                Leave
-              {% else %}
-                Join
-              {% endif %}
+            <button class="ui primary button" type="submit">
+              Edit
             </button>
           </form>
-        </div>
-        {% if current_user.is_superadmin or project.user_id == current_user.id %}
-          <div class="flex-fill">
-            <form
-              method="get"
-              action="{{ url_for('project.edit', project_id=project._id) }}"
-            >
-              <button class="btn btn-secondary btn-block" type="submit">
-                Edit
-              </button>
-            </form>
-          </div>
-          <div class="flex-fill">
-            <form
-              method="post"
-              action="{{ url_for('project.delete', project_id=project._id) }}"
-            >
-              <button class="btn btn-danger btn-block" type="submit">
-                Delete
-              </button>
-            </form>
-          </div>
+          <form
+            method="post"
+            action="{{
+              url_for('projectbp.delete', project_id=project.id)
+            }}"
+          >
+            <button class="ui primary button" type="submit">
+              Delete
+            </button>
+          </form>
         {% endif %}
       </div>
     </div>

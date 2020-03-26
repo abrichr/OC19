@@ -1,188 +1,195 @@
-<!DOCTYPE html>
+<!DOCTYPE html> {% import "macros.html" as m %}
 <html lang="en">
 
 
-{% macro nav_link(
-  endpoint,
-  name,
-  active="active" if request.endpoint==endpoint else "",
-  turbo="true"
-) %}
-  <li class="nav-item {{active}}">
-    <a
-      class="nav-link"
-      href="{{ url_for(endpoint) }}"
-      data-turbolinks="{{ turbo }}"
-    >
-      {{name}}
-    </a>
-  </li>
-{% endmacro %}
-
-
-<head>
-
-  <meta charset="utf-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-  >
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>
-    {{ app_name }}
-    {% block title %}
-    {% endblock %}
-  </title>
-  <link
-    rel="stylesheet"
-    type="text/css"
-    href="{{ url_for('static', filename='css/lib/bootstrap.min.css') }}"
-  />
-  <link
-    rel="shortcut icon"
-    href="{{ url_for('static', filename='favicon.ico') }}"
-  />
-
-
-  {% block css %}
-  {% endblock %}
-
-  <script src="{{ url_for('static', filename='js/lib/turbolinks.js') }}">
-  </script>
-  <script src="{{ url_for('static', filename='js/lib/jquery.min.js') }}">
-  </script>
-  <script src="{{ url_for('static', filename='js/lib/popper.min.js') }}">
-  </script>
-  <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}">
-  </script>
-  <script src="{{ url_for('static', filename='js/lib/fontawesome.min.js') }}">
-  </script>
-  <script src="{{ url_for('static', filename='js/lib/clipboard.min.js') }}">
-  </script>
-
-</head>
-
 <style>
 
-.container > h1,
-.container > h2
-{
-  margin-top: 20px;
+/* Layout */
+
+#container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#header-and-body {
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+}
+
+#navbar > a {
+  border-radius: 0;
+}
+
+#body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px 0;
+}
+body.body-index #body {
+  padding: 0 !important;
+}
+.masthead {
+  flex: 1;
+}
+
+#footer {
+  text-align: center;
+  padding: 13px 0;
+  background: #1B1C1D;
+  border-top: 1px solid #333 !important;
+}
+
+#navbar {
+  margin: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #333;
+}
+
+/* Forms */
+
+/* TODO: vertial align using flexbox */
+
+.form-user {
+   width: 33% !important;
+   margin: 0 auto !important;
+   margin-top: 10% !important;
+}
+
+.form-error {
+   color: #E50000 !important;
+}
+
+/* Flask flashes */
+
+#flashes {
+  margin: 0;
+  padding: 20px;
+}
+#flashes.dark {
+  background: #1B1C1D;
+}
+#flashes li {
+  margin: 0;
+  list-style: none;
   text-align: center;
 }
 
-.flashes {
-    margin: 10px 0 0;
-    padding: 0;
-}
-.flashes li {
-    list-style: none;
-    display: block;
-    text-align: center;
-}
-.flashes .alert {
-  margin-bottom: 0;
-}
+/* Errors */
 
-/* Sticky Footer https://startbootstrap.com/snippets/sticky-footer-flexbox/ */
-
-html,
-body {
-  height: 100%;
-}
-
-#page-content {
-  flex: 1 0 auto;
-}
-
-#sticky-footer {
-  margin-top: 30px;
-  flex-shrink: none;
+.error-box {
+   margin-top: 8%;
 }
 
 </style>
 
 
-{% block styles %}
+<head>
+    {% block head %}
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Semantic Main CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+    <!-- Semantic Reset CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/components/reset.min.css" />
+    <!-- Semantic Menu CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/components/menu.min.css" />
+    <!-- Main Semantic JS  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <!-- Turbolinks JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
+    <!-- Browser tab name -->
+    <title>{{ title }}</title>
+</head>
 
-{% endblock %}
-
-
-<body class="d-flex flex-column">
-
-  <div id="page-content">
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
-      <div class="container">
-        <a class="navbar-brand" href="/">{{ app_name }}</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbar-responsive"
-          aria-controls="navbar-responsive"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar-responsive">
-          <ul class="navbar-nav ml-auto">
-            {{ nav_link('home.main', 'Home') }}
-            {% if current_user.is_authenticated %}
-              {{ nav_link('user.profile', 'Profile') }}
-              {{ nav_link('user.logout', 'Logout', turbo="false") }}
-            {% else %}
-              {{ nav_link('user.register', 'Register') }}
-              {{ nav_link('user.login', 'Login') }}
-            {% endif %}
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <ul class="flashes">
-            {% for category, message in messages %}
-              <li>
-                {% if category == "error" %}
-                  <div class="alert alert-danger" role="alert">
-                    {{ message }}
-                  </div>
-                {% else %}
-                  <div class="alert alert-success" role="alert">
-                    {{ message }}
-                  </div>
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
+<body id="container" class="body-{{ request.endpoint }}">
+  <div id="header-and-body">
+  <div id="header">
+    <!-- Navbar -->
+    <div id="navbar" class="ui inverted menu">
+      {{ m.nav_link('index', 'On-COVID19') }}
+      {{ m.nav_link('projectbp.list', 'Projects') }}
+      <div class="ui right inverted menu">
+        {% if current_user.is_authenticated %}
+          <div class="item">
+            <a class="ui primary button" href="{{ url_for('userbp.account') }}">
+              {{ current_user.full_name }}
+            </a>
+          </div>
+          <div class="item">
+            <a class="ui default button" href="{{
+              url_for('userbp.signout', next=request.path)
+            }}">
+              Sign out
+            </a>
+          </div>
+        {% else %}
+          <div class="item">
+            <a class="ui primary button" href="{{
+              url_for('userbp.signin', next=request.path)
+            }}">
+              Sign in
+            </a>
+          </div>
+          <div class="item">
+            <a class="ui default button" href="{{
+              url_for('userbp.signup', next=request.path)
+            }}">
+              Sign up
+            </a>
+          </div>
         {% endif %}
-      {% endwith %}
+      </div>
     </div>
-
+    {% endblock %}
+  </div>
+  <!-- Message flashing -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul
+        id="flashes"
+        class="{{ 'dark' if request.endpoint == 'index' else '' }}"
+      >
+        {% for category, message in messages %}
+          <li
+            class="
+                ui {{ category }} message flash
+                {{ 'black' if request.endpoint == 'index' else '' }}
+            "
+          >
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <div id="body" class="body">
     {% block content %}
     {% endblock %}
-
+  </div>
+  </div>
+  <div id="footer">
+    <div class="ui inverted divided horizontal footer link list">
+      <div class="item">
+        Made in Toronto
+      </div>
+      <div class="item">
+        <a href="https://github.com/abrichr/oncovid19">
+          <i class="github icon"></i>
+        </a>
+      </div>
+    </div>
   </div>
 
-  <footer id="sticky-footer" class="py-4 bg-light text-black-50">
-    <div class="container text-center">
-      <small>Made in Toronto</small>
-    </div>
-  </footer>
-
   <script>
-
     if (window.location.href.includes('herokuapp')) {
       window.location.href = 'http://www.oncovid19.com/'
     }
-
   </script>
 
 </body>

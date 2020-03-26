@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block head %}
+
+{{ super() }}
+
+<style>
+
+.project-summaries {
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.project-summary .header {
+  margin: 0 0 .5em !important;
+}
+
+.project-summary p {
+  margin: 1em 0 !important;
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="ui container">
+  <div class="ui grid">
+    <div class="ui row">
+      <div class="ui column center aligned">
+        <a href="{{ url_for('projectbp.submit') }}">
+          <div class="ui huge button" id="submit-project-button">
+            Submit A Project
+            <i class="right arrow icon"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  {% if projects %}
+    <div class="project-summaries">
+      {% for project in projects %}
+        <div class="project-summary ui card fluid">
+          <div class="content">
+            <div class="header">
+              {{ project.title }}
+            </div>
+            <div class="ui horizontal label">
+              {{ project.users_joined|length }} user(s)
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <p>
+                  {{ project.description }}
+                </p>
+                <a
+                  href="{{
+                    url_for('projectbp.view', project_id=project.id)
+                  }}"
+                >
+                  <div class="ui primary button">
+                    Open
+                    <i class="right arrow icon"></i>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <h1>No projects found!</h1>
+  {% endif %}
+</div>
+
+{% endblock %}

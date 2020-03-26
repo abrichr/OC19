@@ -1,0 +1,71 @@
+{# myapp/templates/macros.html #}
+
+<!-- Highlight the current tab -->
+{% macro nav_link(endpoint, text) %}
+  {% if request.endpoint is not none %}
+    {% if request.endpoint.startswith(endpoint.split('.')[0]) %}
+        <a class="active teal item" href="{{ url_for(endpoint) }}">{{ text }}</a>
+    {% else %}
+        <a class="item" href="{{ url_for(endpoint) }}">{{ text }}</a>
+    {% endif %}
+  {% else %}
+      <a class="item" href="{{ url_for(endpoint) }}">{{ text }}</a>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro render_field(field) %}
+  <div class="field">
+    {{
+      field(
+        name_=field.name,
+        id=field.name,
+        placeholder=field.description,
+        class_="field",
+        **kwargs
+      )
+    }}
+  </div>
+  {% if field.errors %}
+  <ul>
+    {% for error in field.errors %}
+      <li class="form-error">{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro render_expanded_field(field) %}
+  <div class="field">
+    <div class="ui aligned three column grid">
+      <div class="ui four wide column">
+        <div class="field">
+          {{ field.label }}
+        </div>
+      </div>
+      <div class="eight wide column">
+        {{
+          field(
+            name_=field.name,
+            id=field.name,
+            _placeholder=field.label.text,
+            class_="field"
+          )
+        }}
+        <div class="ui meta">
+          {% if field.description and field.label.text != field.description %}
+            {{ field.description }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if field.errors %}
+    <ul>
+      {% for error in field.errors %}
+        <li class="form-error">{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}

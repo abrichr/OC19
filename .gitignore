@@ -1,5 +1,8 @@
-__pycache__/
-*.py[cod]
-venv/
-.env
-.*.sw[opn]
+*.db
+*.log
+*.pyc
+*.sw[opn]
+*.env*
+*.git*
+activity.log*
+env

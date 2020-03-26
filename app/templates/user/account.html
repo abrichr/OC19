@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="ui header">{{ current_user.full_name }}</h1>
+    <dt>Title</dt>
+    <dd>{{ current_user.title or '-' }}</dd>
+    <dt>Organization</dt>
+    <dd>{{ current_user.organization or '-' }}</dd>
+    <dt>Projects Joined</dt>
+    <dd>
+      <ul>
+        {% for project in current_user.projects_joined %}
+          <li>
+            <a href="{{ url_for('project.view', project_id=project._id) }}">
+              {{ project.title}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </dd>
+
+{% endblock %}

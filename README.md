@@ -1,18 +1,42 @@
-# OC19
+# OnCOVID-19
 
-## Join the Fight against COVID-19 in Ontario
+This repo contains the code for the oncovid19.com website.
 
-This repo contains the code for the OC19 website.
+In the below, replace 'dev' with 'prod' for production environments.
 
-### Setup
+## Setup
 
 ```
 pip install -r requirements
-echo 'export MONGO_URI="mongodb://<user>:<pass>@<host>:<port>/<db>' >> .venv
+echo 'SQLALCHEMY_DATABASE_URI=<database_uri>' >> .env_dev
+echo 'MAIL_PASSWORD' >> .env_dev
+# for sending email
+echo 'MAIL_PASSWORD' >> .env_dev
 ```
 
-### Run
+## Run
 
 ```
+make dev
 python manage.py runserver
 ```
+
+## Troubleshooting
+
+### Docker on Heroku
+
+Set stack:
+
+```
+heroku stack:set container
+```
+
+### `SMTPAuthenticationError` during email verification
+
+See:
+- https://stackoverflow.com/a/27515883/95989
+- https://stackoverflow.com/a/54625596/95989
+
+## Acknowledgements
+
+Based on https://github.com/MaxHalford/flask-boilerplate
