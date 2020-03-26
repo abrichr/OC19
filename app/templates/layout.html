@@ -92,8 +92,12 @@ body {
 
 #footer {
   background: #1b1c1d;
-  padding: 10px;
+  padding: 15px 10px 10px;
   text-align: center;
+}
+#footer * {
+  /* hack to work around "inverted" not working on mobile */
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 /* Forms */
 
@@ -190,7 +194,7 @@ body {
     {% endblock %}
   </div>
   <div id="footer">
-    <div class="ui divided inverted horizontal footer link list">
+    <div class="ui horizontal footer link list">
       <div class="item">
         Made in Toronto
       </div>
