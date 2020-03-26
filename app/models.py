@@ -6,16 +6,8 @@ from flask_login import UserMixin
 from app import db, bcrypt
 
 
-class TimestampMixin:
-    created_timestamp = db.Column(
-        db.TIMESTAMP,
-        default=func.now()
-    )
-    edited_timestamp = db.Column(
-        db.TIMESTAMP,
-        server_default=func.now(),
-        onupdate=func.now()
-    )
+def info(label, description=None):
+    return {'label': label, 'description': description}
 
 
 user_project_table = db.Table(
@@ -35,7 +27,7 @@ user_project_table = db.Table(
 )
 
 
-class User(db.Model, UserMixin, TimestampMixin):
+class User(db.Model, UserMixin):
 
     __tablename__ = 'user'
 
@@ -53,6 +45,17 @@ class User(db.Model, UserMixin, TimestampMixin):
         #back_populates="users_joined"
         backref=db.backref('users_joined'),
         cascade='all,delete'
+    )
+    created_timestamp = db.Column(
+        db.TIMESTAMP,
+        info=info('Created'),
+        default=func.now()
+    )
+    edited_timestamp = db.Column(
+        db.TIMESTAMP,
+        info=info('Edted'),
+        server_default=func.now(),
+        onupdate=func.now()
     )
 
     @property
@@ -79,11 +82,7 @@ class User(db.Model, UserMixin, TimestampMixin):
         return 'User {}: {}'.format(self.id, self.full_name)
 
 
-def info(label, description=None):
-    return {'label': label, 'description': description}
-
-
-class Project(db.Model, TimestampMixin):
+class Project(db.Model):
 
     __tablename__ = 'project'
 
@@ -149,6 +148,17 @@ class Project(db.Model, TimestampMixin):
                 'solution to this problem? If not, do you know who does?'
             )
         )
+    )
+    created_timestamp = db.Column(
+        db.TIMESTAMP,
+        info=info('Created'),
+        default=func.now()
+    )
+    edited_timestamp = db.Column(
+        db.TIMESTAMP,
+        info=info('Edted'),
+        server_default=func.now(),
+        onupdate=func.now()
     )
     def __repr__(self):
         return 'Project {}: {}'.format(self.id, self.title)
