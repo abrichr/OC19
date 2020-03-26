@@ -1,9 +1,21 @@
+from sqlalchemy import func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
-
 from flask_login import UserMixin
 
 from app import db, bcrypt
+
+
+class TimestampMixin:
+    created_timestamp = db.Column(
+        db.TIMESTAMP,
+        default=func.now()
+    )
+    edited_timestamp = db.Column(
+        db.TIMESTAMP,
+        server_default=func.now(),
+        onupdate=func.now()
+    )
 
 
 user_project_table = db.Table(
@@ -23,7 +35,7 @@ user_project_table = db.Table(
 )
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin, TimestampMixin):
 
     __tablename__ = 'user'
 
@@ -71,7 +83,7 @@ def info(label, description=None):
     return {'label': label, 'description': description}
 
 
-class Project(db.Model):
+class Project(db.Model, TimestampMixin):
 
     __tablename__ = 'project'
 
@@ -138,15 +150,5 @@ class Project(db.Model):
             )
         )
     )
-    '''
-    datetime_created = db.Column(
-        db.DateTime,
-        info=info('Modified At')
-    )
-    datetime_modified = db.Column(
-        db.DateTime,
-        info=info('Created At')
-    )
-    '''
     def __repr__(self):
         return 'Project {}: {}'.format(self.id, self.title)
