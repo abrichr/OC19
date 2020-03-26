@@ -7,6 +7,9 @@ from flask import Flask, flash, redirect, request, url_for
 
 app = Flask(__name__)
 
+# Setup the app with the config.py file
+app.config.from_object('app.config')
+
 logging.warning('*' * 40)
 DEBUG = os.environ.get('DEBUG')
 logging.warning('DEBUG: {}'.format(DEBUG))
@@ -14,9 +17,6 @@ is_debug = bool(int(DEBUG))
 logging.warning('is_debug: {}'.format(is_debug))
 app.debug = is_debug
 logging.warning('*' * 40)
-
-# Setup the app with the config.py file
-app.config.from_object('app.config')
 
 # Setup the logger
 from app.logger_setup import logger
