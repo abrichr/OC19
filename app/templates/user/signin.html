@@ -10,7 +10,10 @@
     <form
       class="ui form"
       action="{{
-        url_for('userbp.signin', next=request.args.get('next', 'index'))
+        url_for(
+          'userbp.signin',
+          next=request.args.get('next', url_for('index'))
+        )
       }}"
       method="post"
     >
