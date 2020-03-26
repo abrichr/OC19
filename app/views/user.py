@@ -80,7 +80,6 @@ def signin():
                 flash('Successfully signed in.', 'info')
                 return redirect(next_url)
             else:
-                import ipdb; ipdb.set_trace()
                 flash('The password you have entered is wrong.', 'error')
                 return redirect(url_for('userbp.signin', next_url=next_url))
         else:
