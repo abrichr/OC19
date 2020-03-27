@@ -25,33 +25,41 @@ dt {
   <h1 class="ui header">{{ user.full_name }}</h1>
   <dt>Projects Created</dt>
   <dd>
-    <ul id="project-list">
-      {% for project in user.projects_created %}
-        <li>
-          <a
-            href="{{ url_for('projectbp.view', project_id=project.id) }}"
-            class="ui label"
-          >
-            {{ project.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    {% if user.projects_created %}
+      <ul id="project-list">
+        {% for project in user.projects_created %}
+          <li>
+            <a
+              href="{{ url_for('projectbp.view', project_id=project.id) }}"
+              class="ui label"
+            >
+              {{ project.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      -
+    {% endif %}
   </dd>
   <dt>Projects Joined</dt>
   <dd>
-    <ul id="project-list">
-      {% for project in user.projects_joined %}
-        <li>
-          <a
-            href="{{ url_for('projectbp.view', project_id=project.id) }}"
-            class="ui label"
-          >
-            {{ project.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    {% if user.projects_joined %}
+      <ul id="project-list">
+        {% for project in user.projects_joined %}
+          <li>
+            <a
+              href="{{ url_for('projectbp.view', project_id=project.id) }}"
+              class="ui label"
+            >
+              {{ project.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      -
+    {% endif %}
   </dd>
 </div>
 
