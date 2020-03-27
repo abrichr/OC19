@@ -5,47 +5,42 @@
 {% endblock %}
 
 
-{% macro login_form() %}
-<div class="ui raised text segment">
-  <form
-    class="ui form"
-    action="{{
-      url_for(
-        'userbp.signin',
-        next=request.args.get('next', url_for('index'))
-      )
-    }}"
-    method="post"
-  >
-    <h4 class="ui dividing header">
-      Login
-    </h4>
-    {{ m.render_field(form.email) }}
-    {{ m.render_field(form.password) }}
-    {{ form.csrf_token }}
-    <button class="ui primary button" type="submit">Confirm</button>
-    <a href="{{ url_for('userbp.forgot') }}">
-      <div class="ui floated right basic red button">
-          I forgot my password
-      </div>
-    </a>
-    <p class="login-hint">
-      Don't have an account?
-      <a href="{{ url_for('userbp.signup') }}">Sign up</a>
-    </p>
-  </form>
-</div>
-{% endmacro %}
-
-
 {% block content %}
 
-<div class="ui grid">
+<div class="ui padded grid">
   <div class="five wide computer only column"></div>
   <div class="four wide tablet only column"></div>
   <div class="one wide mobile only column"></div>
   <div class="fourteen wide mobile eight wide tablet six wide computer column">
-    {{ login_form() }}
+    <div class="ui raised text segment">
+      <form
+        class="ui form"
+        action="{{
+          url_for(
+            'userbp.signin',
+            next=request.args.get('next', url_for('index'))
+          )
+        }}"
+        method="post"
+      >
+        <h4 class="ui dividing header">
+          Login
+        </h4>
+        {{ m.render_field(form.email) }}
+        {{ m.render_field(form.password) }}
+        {{ form.csrf_token }}
+        <button class="ui primary button" type="submit">Confirm</button>
+        <a href="{{ url_for('userbp.forgot') }}">
+          <div class="ui floated right basic red button">
+              Forgot Password
+          </div>
+        </a>
+        <p class="login-hint">
+          Don't have an account?
+          <a href="{{ url_for('userbp.signup') }}">Sign up</a>
+        </p>
+      </form>
+    </div>
   </div>
 </div>
 

@@ -48,7 +48,8 @@
               {{ project.title }}
             </div>
             <div class="ui horizontal label">
-              {{ project.users_joined|length }} user(s)
+              {{ project.users_joined|length }}
+              {{ 'members' if project.users_joined|length != 1 else 'member' }}
             </div>
             <div class="card">
               <div class="card-body">

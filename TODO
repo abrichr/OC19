@@ -8,6 +8,8 @@
 - read user location
   - change masthead location
   - list projects near user
+- redirect to previous page after login
+- standardize on login/signin logout/signout
 
 Form:
 - Budget

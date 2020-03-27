@@ -35,10 +35,12 @@ textarea {
   <h2>{{ project.title }}</h2>
     <div class="content">
       <div class="num-users">
+        <p class="ui text meta">
+          {{ project.users_joined|length }}
+          {{ 'members' if project.users_joined|length != 1 else 'member' }}
+          {{ ':' if project.users_joined|length > 0  else '' }}
+        </p>
         <p>
-          <span class="ui meta">
-            {{ project.users_joined|length }} user(s):
-          </span>
           {% for user in project.users_joined %}
             <a
               href="{{
