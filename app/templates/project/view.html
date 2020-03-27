@@ -39,7 +39,7 @@ textarea {
 {% block content %}
 
 <div class="ui container segment">
-  <h2>{{ project.title }}</h2>
+  <h2 class="ui dividing header">{{ project.title }}</h2>
   <div class="content">
     <div class="num-users">
       <p class="meta">
@@ -144,24 +144,24 @@ textarea {
       </div>
     </div>
     <div class="ui divider"></div>
-    {% if project.comments %}
-      <div class="comment-container ui comments">
-        {% for comment in project.comments %}
-          {% if not comment.parent %}
-            {{ make_comment(comment) }}
-          {% endif %}
-        {% endfor %}
-      </div>
-    {% else %}
-      <p>No comments yet. Be the first to share what you think!</p>
-    {% endif %}
   {% else %}
     <p>
       {{ m.nav_link('userbp.signin', 'Sign In') }}
       or
       {{ m.nav_link('userbp.signup', 'Sign Up') }}
-      to leave a comment
+      to leave a comment.
     </p>
+  {% endif %}
+  {% if project.comments %}
+    <div class="comment-container ui comments">
+      {% for comment in project.comments %}
+        {% if not comment.parent %}
+          {{ make_comment(comment) }}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No comments yet. Be the first to share what you think!</p>
   {% endif %}
 </div>
 
