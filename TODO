@@ -11,6 +11,9 @@
 - redirect to previous page after login
 - standardize on login/signin logout/signout
 - base active link on url instead of endpoint
+- stimulus.js
+- swup.js
+
 
 Form:
 - Budget

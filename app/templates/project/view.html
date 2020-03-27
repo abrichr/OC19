@@ -15,14 +15,15 @@ textarea {
   display: inline-block;
 }
 
-.num-users .label {
+.commentbox label {
+  font-weight: normal !important;
+}
+.commentbox button {
+  margin-top: 10px !important;
+}
+.commentbox p {
   margin-bottom: 5px;
 }
-.num-users span.ui.meta {
-  margin-right: 5px;
-}
-
-
 
 </style>
 
@@ -33,79 +34,138 @@ textarea {
 
 <div class="ui container segment">
   <h2>{{ project.title }}</h2>
-    <div class="content">
-      <div class="num-users">
-        <p class="ui text meta">
-          {{ project.users_joined|length }}
-          {{ 'members' if project.users_joined|length != 1 else 'member' }}
-          {{ ':' if project.users_joined|length > 0  else '' }}
-        </p>
-        <p>
-          {% for user in project.users_joined %}
-            <a
-              href="{{
-                url_for('userbp.view', user_id=user.id )
-              }}"
-              class="ui label"
-            >
-              {{ user.full_name }}
-            </a>
-          {% endfor %}
-        </p>
+  <div class="content">
+    <div class="num-users">
+      <p class="meta">
+        {{ project.users_joined|length }}
+        {{ 'members' if project.users_joined|length != 1 else 'member' }}
+      </p>
+      <p>
+        {% for user in project.users_joined %}
+          <a
+            href="{{
+              url_for('userbp.view', user_id=user.id )
+            }}"
+            class="ui label"
+          >
+            {{ user.full_name }}
+          </a>
+        {% endfor %}
+      </p>
+    </div>
+    <div class="ui divider"></div>
+    {% for key, field in field_by_key.items() %}
+      <div class="ui aligned four wide stackable grid">
+        <div class="ui four wide column">
+          <strong>
+            {{ field['label'] }}
+          </strong>
+        </div>
+        <div class="eight wide column">
+          {{ field['data'] or '-' }}
+        </div>
       </div>
       <div class="ui divider"></div>
-      {% for key, field in field_by_key.items() %}
-        <div class="ui aligned four wide stackable grid">
-          <div class="ui four wide column">
-            <strong>
-              {{ field['label'] }}
-            </strong>
-          </div>
-          <div class="eight wide column">
-            {{ field['data'] or '-' }}
-          </div>
-        </div>
-        <div class="ui divider"></div>
-      {% endfor %}
-      <div id="project-actions">
+    {% endfor %}
+    <div id="project-actions">
+      <form
+        method="post"
+        action="{{ url_for('projectbp.join', project_id=project.id) }}"
+      >
+        <button class="ui primary button" type="submit">
+          {% if current_user in project.users_joined %}
+            Leave
+          {% else %}
+            Join
+          {% endif %}
+          <i class="right arrow icon"></i>
+        </button>
+      </form>
+      {%
+        if current_user.is_superadmin or
+        project.created_by_user_id == current_user.id
+      %}
         <form
-          method="post"
-          action="{{ url_for('projectbp.join', project_id=project.id) }}"
+          method="get"
+          action="{{ url_for('projectbp.edit', project_id=project.id) }}"
         >
-          <button class="ui primary button" type="submit">
-            {% if current_user in project.users_joined %}
-              Leave
-            {% else %}
-              Join
-            {% endif %}
-            <i class="right arrow icon"></i>
+          <button class="ui green button" type="submit">
+            Edit
           </button>
         </form>
-        {%
-          if current_user.is_superadmin or
-          project.created_by_user_id == current_user.id
-        %}
-          <form
-            method="get"
-            action="{{ url_for('projectbp.edit', project_id=project.id) }}"
-          >
-            <button class="ui primary button" type="submit">
-              Edit
-            </button>
-          </form>
-          <form
-            method="post"
-            action="{{
-              url_for('projectbp.delete', project_id=project.id)
-            }}"
-          >
-            <button class="ui primary button" type="submit">
-              Delete
-            </button>
-          </form>
-        {% endif %}
+        <form
+          method="post"
+          action="{{
+            url_for('projectbp.delete', project_id=project.id)
+          }}"
+        >
+          <button class="ui red button" type="submit">
+            Delete
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% if 0 %}
+<div class="ui container segment">
+  <h3>Comments</h3>
+  {% if current_user.is_authenticated %}
+    <div class="commentbox">
+      <div class="ui form">
+        <label>
+          <p class="meta">
+            Comment as
+            <a href="{{ url_for('userbp.view', user_id=current_user.id) }}">
+              {{ current_user.full_name }}
+            </a>
+          </p>
+        </label>
+        <form
+          method="post"
+          action="{{ url_for('commentbp.submit') }}"
+        >
+          <input type="hidden" name="project_id" value="{{ project.id }}" />
+          <textarea rows="2" name="comment" id="comment"></textarea>
+          <button class="ui primary button" type="submit">
+            Submit
+          </button>
+        </form>
       </div>
     </div>
+    <div class="ui divider"></div>
+    {% if project.comments %}
+      <div class="comment-container">
+        {% for comment in project.comments %}
+          <div class="comment ui card fluid">
+            <div class="content">
+              <div>
+                {{ comment.created_by_user.full_name }}
+              </div>
+              <div class="meta">
+                {{ comment.age }}
+              </div>
+              <div>
+                {{ comment.text }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No comments yet. Be the first to share what you think!</p>
+    {% endif %}
+  {% else %}
+    <p>
+      {{ m.nav_link('userbp.signin', 'Sign In') }}
+      or
+      {{ m.nav_link('userbp.signup', 'Sign Up') }}
+      to leave a comment
+    </p>
+  {% endif %}
 </div>
+{% endif %}
 
 {% endblock %}
