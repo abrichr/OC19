@@ -10,6 +10,7 @@
   - list projects near user
 - redirect to previous page after login
 - standardize on login/signin logout/signout
+- base active link on url instead of endpoint
 
 Form:
 - Budget

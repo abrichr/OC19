@@ -1,24 +1,38 @@
 {% extends "layout.html" %}
 
 {% block head %}
-    {{ super() }}
+
+{{ super() }}
+
+<style>
+#project-list {
+  padding: 0;
+}
+#project-list li {
+  list-style: none;
+  margin-bottom: 5px;
+}
+dt {
+  font-weight: bold;
+}
+</style>
+
 {% endblock %}
 
 {% block content %}
 
 <div class="ui container segment">
   <h1 class="ui header">{{ user.full_name }}</h1>
-  <dt>Title</dt>
-  <dd>{{ user.title or '-' }}</dd>
-  <dt>Organization</dt>
-  <dd>{{ user.organization or '-' }}</dd>
-  <dt>Projects Joined</dt>
+  <dt>Projects Joined:</dt>
   <dd>
-    <ul>
+    <ul id="project-list">
       {% for project in user.projects_joined %}
         <li>
-          <a href="{{ url_for('projectbp.view', project_id=project.id) }}">
-            {{ project.title}}
+          <a
+            href="{{ url_for('projectbp.view', project_id=project.id) }}"
+            class="ui label"
+          >
+            {{ project.title }}
           </a>
         </li>
       {% endfor %}
