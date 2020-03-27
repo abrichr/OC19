@@ -43,9 +43,10 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
 # Import the views
-from app.views import main, user, project, error
+from app.views import main, user, project, error, comment
 app.register_blueprint(user.userbp)
 app.register_blueprint(project.projectbp)
+app.register_blueprint(comment.commentbp)
 
 # Setup the user login process
 from flask_login import LoginManager

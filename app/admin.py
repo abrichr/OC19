@@ -9,7 +9,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 
 from app import app, db, config
-from app.models import User, Project
+from app.models import User, Project, Comment
 
 
 print('config.env_path:', config.env_path)
@@ -35,9 +35,14 @@ class ProjectView(ModelView):
     column_hide_backrefs = False
 
 
+class CommentView(ModelView):
+    column_hide_backrefs = False
+
+
 # Users
 admin.add_view(UserView(User, db.session))
 admin.add_view(ProjectView(Project, db.session))
+admin.add_view(CommentView(Comment, db.session))
 
 # Static files
 path = op.join(op.dirname(__file__), 'static')

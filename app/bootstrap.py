@@ -37,19 +37,27 @@ def bootstrap_db(admin_email, admin_password):
         {'email': 'obenfine@gmail.com',
          'first_name': 'Ben',
          'last_name': 'Fine',
-         'password': b'$2b$12$yQuKM52yqfDmlxyFREHVx.Y5sVn16ExF3bYiHb48B7vrI7099y102'},
+         'password': b'$2b$12$lO3kyJ6cDRnAg7CFRtLaf.D9NTiq5ZRNuc02bXJkGwnCROn14lJsC'},
+
         {'email': 'pz.chen@mail.utoronto.ca',
          'first_name': 'Paul',
          'last_name': 'Chen',
-         'password': b'$2b$12$yud.pEnTAjjCsiJYBkyy3.9IBema6o.qO9lHORYd9c.jU1qcs/C5q'},
+         'password': b'$2b$12$ovlfgDWap.GnZGdDepyXGuzXLoMlUe/gKyUFhpdeXp7p5D9FTk/XW'},
+
         {'email': 'awhitehead@klick.com',
          'first_name': 'Alf',
          'last_name': 'Whitehead',
-         'password': b'$2b$12$ByrO44nBOaAUKFkpea2WgOT5XB5InsyI8WVICYP4C3MoryVKErfU.'},
+         'password': b'$2b$12$OfOuOGVsdvRKn0iF9oo.M.Zhg/YuQTG.XkDbsfLOlijxNxduYQd1W'},
+
+        {'email': 'aesensoy@klick.com',
+         'first_name': 'Ali',
+         'last_name': 'Esensoy',
+         'password': b'$2b$12$tENgE2vekacPpTS2umKmB.0YL1YmeVSztEsLd.VWFNHb2tMgPCd0.'},
+
         {'email': 'richard.abrich@gmail.com',
          'first_name': 'Richard',
          'last_name': 'Abrich',
-         'password': b'$2b$12$EMLph1vnjjCmSRX75dno5u4BNbhQHQJ8MlgcRD8AJSqNdV6xmcF4.'},
+         'password': b'$2b$12$ckWejGhWaehMlXbyXyksm.JmNyWW82vzndtJQ/Y3hLN4qAF6z3uaq'},
     ]
     for user_dict in user_dicts:
         user = User(**user_dict)
@@ -72,6 +80,7 @@ def bootstrap_db(admin_email, admin_password):
             "users_joined": [
                 user_by_email['obenfine@gmail.com'],
                 user_by_email['richard.abrich@gmail.com'],
+                user_by_email['aesensoy@klick.com']
             ]
         },
         {

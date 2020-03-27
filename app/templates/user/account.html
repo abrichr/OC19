@@ -61,6 +61,20 @@ dt {
       -
     {% endif %}
   </dd>
+  {% if 0 %}
+  <dt>Comments</dt>
+  <dd>
+    {% if user.comments_created %}
+      <ul id="comment-list">
+        {% for comment in user.comments_created %}
+          <li>
+            {{ comment.text }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  <dd>
+  {% endif %}
 </div>
 
 {% endblock %}

@@ -15,14 +15,20 @@ textarea {
   display: inline-block;
 }
 
-.commentbox label {
+.comment-box label {
   font-weight: normal !important;
 }
-.commentbox button {
+.comment-box button,
+.reply-box button
+{
   margin-top: 10px !important;
 }
-.commentbox p {
-  margin-bottom: 5px;
+
+.hidden {
+  display: none;
+}
+.ui.comments .comment>.comments {
+	padding-bottom: 0 !important;
 }
 
 </style>
@@ -109,11 +115,12 @@ textarea {
 </div>
 
 
-{% if 0 %}
 <div class="ui container segment">
-  <h3>Comments</h3>
+  <h3 class="ui dividing header">
+    Comments
+  </h3>
   {% if current_user.is_authenticated %}
-    <div class="commentbox">
+    <div class="comment-box">
       <div class="ui form">
         <label>
           <p class="meta">
@@ -130,28 +137,19 @@ textarea {
           <input type="hidden" name="project_id" value="{{ project.id }}" />
           <textarea rows="2" name="comment" id="comment"></textarea>
           <button class="ui primary button" type="submit">
-            Submit
+            <i class="icon edit"></i>
+            Comment
           </button>
         </form>
       </div>
     </div>
     <div class="ui divider"></div>
     {% if project.comments %}
-      <div class="comment-container">
+      <div class="comment-container ui comments">
         {% for comment in project.comments %}
-          <div class="comment ui card fluid">
-            <div class="content">
-              <div>
-                {{ comment.created_by_user.full_name }}
-              </div>
-              <div class="meta">
-                {{ comment.age }}
-              </div>
-              <div>
-                {{ comment.text }}
-              </div>
-            </div>
-          </div>
+          {% if not comment.parent %}
+            {{ make_comment(comment) }}
+          {% endif %}
         {% endfor %}
       </div>
     {% else %}
@@ -166,6 +164,110 @@ textarea {
     </p>
   {% endif %}
 </div>
-{% endif %}
+
+<div class="hidden">
+  <div id="reply-box" class="reply-box">
+    <div class="comment">
+      <a class="avatar"></a>
+      <div class="content">
+        <div class="ui reply form">
+          <form
+            method="post"
+            action="{{ url_for('commentbp.submit') }}"
+          >
+            <input
+              type="hidden"
+              class="project_id"
+              name="project_id"
+              value="{{ project.id }}"
+            />
+            <input type="hidden" class="parent_id" name="parent_id" />
+            <textarea rows="2" name="comment" id="comment"></textarea>
+            <button class="ui primary button" type="submit">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function isEmpty(el){
+  return !$.trim(el.html())
+}
+
+$('.reply-link').click((e) => {
+  console.log('click e:', e)
+  let $replyLink = $(e.currentTarget)
+  let parentId = $replyLink.data('parent-id')
+  console.log('parentId:', parentId)
+  let $comment = $replyLink.closest('.comment')
+  let $comments = $comment.find('.comments:first')
+  console.log('$comment:', $comment)
+  console.log('$comments:', $comments)
+  let $existingReplyBox = $comments.find('.reply-box')
+  console.log('$existingReplyBox:', $existingReplyBox)
+  if ($existingReplyBox.length) {
+    $existingReplyBox.remove()
+    if (isEmpty($comments)) {
+      $comments.hide()
+    }
+  } else {
+    let $replyBox = $('#reply-box')
+    console.log('$replyBox:', $replyBox)
+    let $clone = $replyBox.clone()
+    console.log('$clone:', $clone)
+    let $parentId = $clone.find('.parent_id')
+    console.log('$parentId:', $parentId)
+    $parentId.val(parentId)
+    $comments.prepend($clone)
+    $comments.show()
+  }
+})
+
+</script>
 
 {% endblock %}
+
+{% macro make_comment(comment) %}
+
+<div class="comment">
+  <a class="avatar">
+    <img src="/static/img/avatar.png">
+  </a>
+  <div class="content">
+    <a
+      class="author"
+      href="{{
+        url_for('userbp.view', user_id=comment.created_by_user.id )
+      }}"
+    >
+      {{ comment.created_by_user.full_name }}
+    </a>
+    <div class="metadata">
+      <span class="date">
+        {{ comment.age }}
+      </span>
+    </div>
+    <div class="text">
+      <p>
+        {{ comment.text }}
+      </p>
+    </div>
+    <div class="actions">
+      <a class="reply-link" data-parent-id="{{ comment.id }}">Reply</a>
+    </div>
+  </div>
+  <div class="comments {{ 'hidden' if not comment.replies.count() else '' }}">
+  {% if comment.replies %}
+    {% for reply in comment.replies %}
+      {{ make_comment(reply) }}
+    {% endfor %}
+  {% endif %}
+  </div>
+</div>
+
+{% endmacro %}
