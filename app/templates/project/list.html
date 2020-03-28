@@ -53,7 +53,7 @@
             </div>
             <div class="ui label">
               {{ project.comments|length }}
-              {{ 'comments' if project.users_joined|length != 1 else 'comment' }}
+              {{ 'comments' if project.comments|length != 1 else 'comment' }}
             </div>
             <div class="card">
               <div class="card-body">
