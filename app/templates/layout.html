@@ -164,10 +164,14 @@
           {{ m.nav_link('projectbp.list', 'Projects') }}
           {% if current_user.is_authenticated %}
             {{ m.nav_link('userbp.account', 'Profile') }}
-            {{ m.nav_link('userbp.signout', 'Sign Out') }}
+            {{
+              m.nav_link(
+                'userbp.signout', 'Sign Out', next=request.path
+              )
+            }}
           {% else %}
-            {{ m.nav_link('userbp.signin', 'Sign In') }}
-            {{ m.nav_link('userbp.signup', 'Sign Up') }}
+            {{ m.nav_link('userbp.signin', 'Sign In', next=request.path) }}
+            {{ m.nav_link('userbp.signup', 'Sign Up', next=request.path) }}
           {% endif %}
         </div>
       </div>

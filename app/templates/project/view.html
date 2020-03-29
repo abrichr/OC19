@@ -250,7 +250,7 @@ $('.reply-link').click((e) => {
     <a
       class="author"
       href="{{
-        url_for('userbp.view', user_id=comment.created_by_user.id )
+        url_for('userbp.view', user_id=comment.created_by_user.id)
       }}"
     >
       {{ comment.created_by_user.full_name }}

@@ -1,10 +1,14 @@
 {# myapp/templates/macros.html #}
 
-{% macro nav_link(endpoint, text) %}
+{% macro nav_link(endpoint, text, next=None) %}
   {% if is_active_route(endpoint) and endpoint != 'index' %}
-      <a class="active item" href="{{ url_for(endpoint) }}">{{ text }}</a>
+      <a class="active item" href="{{ url_for(endpoint, next=next if next else None) }}">
+        {{ text }}
+      </a>
   {% else %}
-      <a class="item" href="{{ url_for(endpoint) }}">{{ text }}</a>
+      <a class="item" href="{{ url_for(endpoint, next=next if next else None) }}">
+        {{ text }}
+      </a>
   {% endif %}
 {% endmacro %}
 

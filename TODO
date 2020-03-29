@@ -13,6 +13,7 @@
 - base active link on url instead of endpoint
 - stimulus.js
 - swup.js
+- scrape http://webapps.cihr-irsc.gc.ca/decisions/
 
 
 Form:

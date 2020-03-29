@@ -81,10 +81,10 @@ def signin():
                 return redirect(next_url)
             else:
                 flash('The password you have entered is wrong.', 'error')
-                return redirect(url_for('userbp.signin', next_url=next_url))
+                return redirect(url_for('userbp.signin', next=next_url))
         else:
             flash('Unknown email address.', 'error')
-            return redirect(url_for('userbp.signin', next_url=next_url))
+            return redirect(url_for('userbp.signin', next=next_url))
     return render_template('user/signin.html', form=form, title='Sign in')
 
 
