@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from slugify import slugify
 from sqlalchemy import inspect
 
-from app import db
+from app import app, db
 from app.forms.project import ProjectForm
 from app.models import Project
 
@@ -86,6 +86,7 @@ def view(project_id, user_slug=None):
     )
 
 
+@app.route('/projects', methods=['GET', 'POST'], endpoint='projects')
 @projectbp.route('/list', methods=['GET', 'POST'])
 def list():
     projects = Project.query.all()
