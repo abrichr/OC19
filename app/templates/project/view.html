@@ -18,8 +18,8 @@ textarea {
 .comment-box label {
   font-weight: normal !important;
 }
-.comment-box button,
-.reply-box button
+.comment-box button[type=submit],
+.reply-box button[type=submit]
 {
   margin-top: 10px !important;
 }
@@ -97,7 +97,11 @@ textarea {
       %}
         <form
           method="get"
-          action="{{ url_for('projectbp.edit', project_id=project.id) }}"
+          action="{{ url_for(
+              'projectbp.edit',
+              project_id=project.id,
+              user_slug=slugify(project.title)
+          ) }}"
         >
           <button class="ui green button" type="submit">
             Edit

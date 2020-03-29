@@ -24,7 +24,8 @@ textarea {
     action="{{
       url_for(
         'projectbp.{}'.format(action),
-        project_id=project.id if project else None
+        project_id=project.id if project else None,
+        user_slug=slugify(project.title)
       )
     }}"
     method="post"

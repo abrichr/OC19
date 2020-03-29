@@ -62,7 +62,11 @@
                 </p>
                 <a
                   href="{{
-                    url_for('projectbp.view', project_id=project.id)
+                    url_for(
+                      'projectbp.view',
+                      project_id=project.id,
+                      user_slug=slugify(project.title)
+                    )
                   }}"
                 >
                   <div class="ui primary button">

@@ -4,6 +4,7 @@ from pprint import pformat
 
 from flask import Flask, flash, redirect, request, url_for
 from flask_toastr import Toastr
+from slugify import slugify
 
 
 app = Flask(__name__)
@@ -73,12 +74,21 @@ def handle_needs_login():
     )
     return redirect(url_for('userbp.signin', next=request.path))
 
+
 @app.context_processor
 def inject_is_active_route():
-    from pprint import pprint
-    pprint(vars(request))
     is_active_route = True
     return dict(is_active_route=is_active_route)
+
+
+'''
+@app.context_processor
+def dump_request():
+    from pprint import pprint
+    print('request:')
+    pprint(vars(request))
+'''
+
 
 @app.context_processor
 def inject_is_active_route():
@@ -88,6 +98,11 @@ def inject_is_active_route():
             if request.url_rule else None
         )
     return dict(is_active_route=is_active_route)
+
+
+@app.context_processor
+def inject_slugify():
+    return dict(slugify=slugify)
 
 
 from app import admin

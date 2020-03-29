@@ -7,12 +7,12 @@ from flask_login import current_user, login_required
 from slugify import slugify
 from sqlalchemy import inspect
 
-from app import app, db
+from app import db
 from app.forms.project import ProjectForm
 from app.models import Project
 
 
-projectbp = Blueprint('projectbp', __name__, url_prefix='/project')
+projectbp = Blueprint('projectbp', __name__, url_prefix='/projects')
 
 
 @projectbp.route('/submit/', methods=['GET', 'POST'])
@@ -52,8 +52,8 @@ def submit():
         is_invalid=was_submitted and (not is_valid)
     )
 
-@projectbp.route('/view/<project_id>/', methods=['GET', 'POST'])
-@projectbp.route('/view/<project_id>/<user_slug>/', methods=['GET', 'POST'])
+@projectbp.route('/<project_id>/', methods=['GET', 'POST'])
+@projectbp.route('/<project_id>/<user_slug>/', methods=['GET', 'POST'])
 def view(project_id, user_slug=None):
     print('project_id:', project_id)
     print('user_slug:', user_slug)
@@ -86,8 +86,7 @@ def view(project_id, user_slug=None):
     )
 
 
-@app.route('/projects', methods=['GET', 'POST'], endpoint='projects')
-@projectbp.route('/list', methods=['GET', 'POST'])
+@projectbp.route('/', methods=['GET', 'POST'])
 def list():
     projects = Project.query.all()
     return render_template(
@@ -116,9 +115,10 @@ def join(project_id):
     return redirect(url_for('projectbp.view', project_id=project.id))
 
 
-@projectbp.route('/edit/<project_id>/', methods=['GET', 'POST'])
+@projectbp.route('/<project_id>/edit/', methods=['GET', 'POST'])
+@projectbp.route('/<project_id>/<user_slug>/edit/', methods=['GET', 'POST'])
 @login_required
-def edit(project_id):
+def edit(project_id, user_slug=None):
     project = Project.query.filter_by(id=project_id).first()
     if not project:
         flash('No such project exists', 'error')
@@ -142,7 +142,11 @@ def edit(project_id):
     form._project_id = int(project_id)
 
     was_submitted = request.method == 'POST'
-    print('project.edit() form:', form, 'was_submitted:', was_submitted)
+    print(
+        'project.edit() form:', form,
+        'request.method:', request.method,
+        'was_submitted:', was_submitted
+    )
     if was_submitted:
         is_valid = form.validate()
         if is_valid:
@@ -160,7 +164,11 @@ def edit(project_id):
             for key, val in project_dict.items():
                 setattr(project, key, val)
             db.session.commit()
-            return redirect(url_for('projectbp.view', project_id=project_id))
+            return redirect(url_for(
+                'projectbp.view',
+                project_id=project_id,
+                user_slug=slugify(project.title)
+            ))
         else:
             flash(
                 'There was an error with your submission, please try again',
