@@ -4,11 +4,13 @@ from flask import (
     abort, Blueprint, flash, render_template, redirect, request, url_for, flash
 )
 from flask_login import current_user, login_required
+from slugify import slugify
 from sqlalchemy import inspect
 
 from app import db
 from app.forms.project import ProjectForm
 from app.models import Project
+
 
 projectbp = Blueprint('projectbp', __name__, url_prefix='/project')
 
@@ -51,8 +53,16 @@ def submit():
     )
 
 @projectbp.route('/view/<project_id>/', methods=['GET', 'POST'])
-def view(project_id):
+@projectbp.route('/view/<project_id>/<user_slug>/', methods=['GET', 'POST'])
+def view(project_id, user_slug=None):
+    print('project_id:', project_id)
+    print('user_slug:', user_slug)
     project = Project.query.filter_by(id=project_id).first()
+    slug = slugify(project.title)
+    if slug != user_slug:
+        return redirect(url_for(
+            'projectbp.view', project_id=project_id, user_slug=slug
+        ))
     columns = [c for c in inspect(Project).columns]
 
     # XXX hack
