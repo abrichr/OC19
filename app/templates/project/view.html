@@ -28,14 +28,26 @@ textarea {
   display: none;
 }
 .ui.comments .comment>.comments {
-	padding-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .comment-box .meta {
   margin-bottom: 5px;
 }
 
+.CodeMirror, .CodeMirror-scroll {
+  min-height: 100px !important;
+}
+
+.editor-toolbar:before,
+.editor-toolbar:after {
+  margin: 0 !important;
+}
+
 </style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
 {% endblock %}
 
@@ -144,6 +156,13 @@ textarea {
         >
           <input type="hidden" name="project_id" value="{{ project.id }}" />
           <textarea rows="2" name="comment" id="comment"></textarea>
+          <script>
+            var easyMDE = new SimpleMDE({
+              element: document.getElementById('comment'),
+              hideIcons: ['side-by-side'],
+              status: false
+            })
+          </script>
           <button class="ui primary button" type="submit">
             <i class="icon edit"></i>
             Comment
@@ -174,7 +193,7 @@ textarea {
 </div>
 
 <div class="hidden">
-  <div id="reply-box" class="reply-box">
+  <div class="reply-box">
     <div class="comment">
       <a class="avatar"></a>
       <div class="content">
@@ -190,7 +209,7 @@ textarea {
               value="{{ project.id }}"
             />
             <input type="hidden" class="parent_id" name="parent_id" />
-            <textarea rows="2" name="comment" id="comment"></textarea>
+            <textarea rows="2" name="comment" class="reply"></textarea>
             <button class="ui primary button" type="submit">
               Submit
             </button>
@@ -210,30 +229,38 @@ function isEmpty(el){
 $('.reply-link').click((e) => {
   console.log('click e:', e)
   let $replyLink = $(e.currentTarget)
-  let parentId = $replyLink.data('parent-id')
-  console.log('parentId:', parentId)
   let $comment = $replyLink.closest('.comment')
-  let $comments = $comment.find('.comments:first')
   console.log('$comment:', $comment)
+  let $comments = $comment.find('.comments:first')
   console.log('$comments:', $comments)
-  let $existingReplyBox = $comments.find('.reply-box')
-  console.log('$existingReplyBox:', $existingReplyBox)
-  if ($existingReplyBox.length) {
-    $existingReplyBox.remove()
+  let $replies = $('.comments .reply-box')
+  console.log('$replies:', $replies)
+  if ($replies.length) {
+    $replies.remove()
     if (isEmpty($comments)) {
       $comments.hide()
     }
-  } else {
-    let $replyBox = $('#reply-box')
-    console.log('$replyBox:', $replyBox)
-    let $clone = $replyBox.clone()
-    console.log('$clone:', $clone)
-    let $parentId = $clone.find('.parent_id')
-    console.log('$parentId:', $parentId)
-    $parentId.val(parentId)
-    $comments.prepend($clone)
-    $comments.show()
+
   }
+  let $replyBox = $('.hidden .reply-box')
+  console.log('$replyBox:', $replyBox)
+  let $clone = $replyBox.clone()
+  console.log('$clone:', $clone)
+  let parentId = $replyLink.data('parent-id')
+  console.log('parentId:', parentId)
+  let $parentId = $clone.find('.parent_id')
+  console.log('$parentId:', $parentId)
+  $parentId.val(parentId)
+  $comments.prepend($clone)
+  $comments.show()
+  let $reply = $clone.find('textarea.reply')
+  let reply = $reply[0]
+  console.log('$reply:', $reply, 'reply:', reply)
+  var easyMDE = new SimpleMDE({
+    element: $reply[0],
+    hideIcons: ['side-by-side'],
+    status: false
+  })
 })
 
 </script>
@@ -262,7 +289,7 @@ $('.reply-link').click((e) => {
     </div>
     <div class="text">
       <p>
-        {{ comment.text }}
+        {{ comment.text|markdown }}
       </p>
     </div>
     <div class="actions">

@@ -4,6 +4,7 @@ from pprint import pformat
 
 from flask import Flask, flash, redirect, request, url_for
 from flask_toastr import Toastr
+from flaskext.markdown import Markdown
 from slugify import slugify
 
 
@@ -24,6 +25,7 @@ app.debug = is_debug
 logger.warning('*' * 40)
 
 toastr = Toastr(app)
+Markdown(app)
 
 # Setup the database
 from flask_sqlalchemy import SQLAlchemy
