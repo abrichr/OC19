@@ -25,7 +25,7 @@ textarea {
       url_for(
         'projectbp.{}'.format(action),
         project_id=project.id if project else None,
-        user_slug=slugify(project.title)
+        user_slug=slugify(project.title) if project else None
       )
     }}"
     method="post"
