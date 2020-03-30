@@ -51,14 +51,32 @@
             <div class="header">
               {{ project.title }}
             </div>
-            <div class="ui label">
+            <a
+              class="ui label"
+              href="{{
+                url_for(
+                  'projectbp.view',
+                  project_id=project.id,
+                  user_slug=slugify(project.title)
+                )
+              }}"
+            />
               {{ project.users_joined|length }}
               {{ 'members' if project.users_joined|length != 1 else 'member' }}
-            </div>
-            <div class="ui label">
+            </a>
+            <a
+              class="ui label"
+              href="{{
+                url_for(
+                  'projectbp.view',
+                  project_id=project.id,
+                  user_slug=slugify(project.title)
+                )
+              }}#comments"
+            />
               {{ project.comments|length }}
               {{ 'comments' if project.comments|length != 1 else 'comment' }}
-            </div>
+            </a>
             <div class="card">
               <div class="card-body">
                 <p>

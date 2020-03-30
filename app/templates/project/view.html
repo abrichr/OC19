@@ -174,7 +174,7 @@ function unloadCommentEditor() {
 {% block content %}
 
 <div class="ui container segment">
-  <h2 class="ui dividing header">{{ project.title }}</h2>
+  <h2 class="ui header">{{ project.title }}</h2>
   <div class="content">
     <div class="num-users">
       <p class="meta">
@@ -255,7 +255,7 @@ function unloadCommentEditor() {
 
 
 <div class="ui container segment">
-  <h3 class="ui dividing header">
+  <h3 class="ui header">
     Comments
   </h3>
   {% if current_user.is_authenticated %}
@@ -275,14 +275,18 @@ function unloadCommentEditor() {
         >
           <input type="hidden" name="project_id" value="{{ project.id }}" />
           <textarea rows="2" name="comment" id="comment"></textarea>
-          <button class="ui primary button" type="submit">
+          <!-- #comments scrolls here to account for header -->
+          <button
+            id="comments"
+            class="ui primary button"
+            type="submit"
+          >
             <i class="icon edit"></i>
             Comment
           </button>
         </form>
       </div>
     </div>
-    <div class="ui divider"></div>
   {% else %}
     <p>
       {{ m.nav_link('userbp.signin', 'Sign In') }}
@@ -291,17 +295,19 @@ function unloadCommentEditor() {
       to leave a comment.
     </p>
   {% endif %}
-  {% if project.comments %}
-    <div class="comment-container ui comments">
+  <div class="comment-container ui comments">
+    {% if project.comments %}
       {% for comment in project.comments %}
         {% if not comment.parent %}
           {{ make_comment(comment) }}
         {% endif %}
       {% endfor %}
-    </div>
-  {% else %}
-    <p>No comments yet. Be the first to share what you think!</p>
-  {% endif %}
+    {% else %}
+      <p>
+        No comments yet. Be the first to share what you think!
+      </p>
+    {% endif %}
+  </div>
 </div>
 
 <div class="hidden">
