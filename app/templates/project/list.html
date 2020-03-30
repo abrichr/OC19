@@ -8,7 +8,7 @@
 
 .project-summaries {
   max-width: 500px;
-  margin: 20px auto 0;
+  margin: 0 auto;
 }
 
 .project-summary .header {
@@ -24,21 +24,25 @@
 {% endblock %}
 
 
+{% block actions %}
+
+
+<div class="ui container">
+  <a href="{{ url_for('projectbp.submit') }}">
+    <div class="ui button">
+      <i class="plus icon"></i>
+      New Project
+    </div>
+  </a>
+</div>
+
+
+{% endblock %}
+
+
 {% block content %}
 
 <div class="ui container">
-  <div class="ui grid">
-    <div class="ui row">
-      <div class="ui column center aligned">
-        <a href="{{ url_for('projectbp.submit') }}">
-          <div class="ui huge button" id="submit-project-button">
-            Submit A Project
-            <i class="right arrow icon"></i>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
   {% if projects %}
     <div class="project-summaries">
       {% for project in projects %}

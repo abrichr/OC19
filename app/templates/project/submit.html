@@ -16,6 +16,20 @@ textarea {
 {% endblock %}
 
 
+{% block actions %}
+
+<div class="ui container">
+  <a href="{{ url_for('projectbp.list') }}">
+    <div class="ui button">
+      <i class="left arrow icon"></i>
+      List Projects
+    </div>
+  </a>
+</div>
+
+{% endblock %}
+
+
 {% block content %}
 
 <div class="ui container segment">

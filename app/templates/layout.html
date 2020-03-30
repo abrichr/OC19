@@ -87,17 +87,14 @@
   }
 
   #content {
-    margin-top: 40px;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    padding-top: 20px !important;
     padding-bottom: 20px !important;
   }
   #index #content {
-    padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
 
@@ -150,7 +147,28 @@
   .meta {
     color: rgba(0, 0, 0, .5);
   }
+
+
+  #action-button-container {
+    margin-top: 50px;
+    margin-bottom: 10px;
+  }
+  #index #content {
+    margin-top: 30px;
+  }
+  #index #action-button-container {
+    display: none;
+  }
+  @media only screen and (max-width: 767px) {
+    #action-button-container {
+      margin-top: 60px;
+    }
+  }
+
   </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
 </head>
 
@@ -198,6 +216,10 @@
         {% endif %}
       </div>
     </div>
+  </div>
+  <div class="sixteen wide column" id="action-button-container">
+    {% block actions %}
+    {% endblock %}
   </div>
   <div class="sixteen wide column" id="content">
     {% block content %}

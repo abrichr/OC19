@@ -46,13 +46,124 @@ textarea {
 
 </style>
 
+<script>
+
+var commentEditor
+var replyEditor
+
+$(document).on('turbolinks:load', onTurbolinksLoad)
+$(document).on('turbolinks:click', onTurbolinksClick)
+
+
+function isEmpty(el){
+  return !$.trim(el.html())
+}
+
+function onTurbolinksLoad() {
+  console.log('onTrubolinksLoad()')
+  initCommentEditor()
+  initReplyLinks()
+}
+
+function onTurbolinksClick() {
+  console.log('onTurbolinksClick()')
+  // Without this we get multiple comment boxes when navigating back
+  unloadCommentEditor()
+  // Reply boxes are only created on click, not by default on page load.
+  // Unloading results in an empty textarea when navigating back.
+}
+
+function initCommentEditor() {
+  let commentElement = document.getElementById('comment')
+  console.log('initCommentEditor() commentElement:', commentElement)
+  // The user may have loaded this header via a direct link, in which case
+  // this will be null when they navigate away
+  if (commentElement) {
+    commentEditor = new SimpleMDE({
+      element: commentElement,
+      hideIcons: ['side-by-side'],
+      status: false
+    })
+  }
+}
+
+function initReplyLinks() {
+  console.log('initReplyLinks()')
+  $('.reply-link').click((e) => {
+    console.log('click e:', e)
+    let $replyLink = $(e.currentTarget)
+    let $comment = $replyLink.closest('.comment')
+    console.log('$comment:', $comment)
+    let $comments = $comment.find('.comments:first')
+    console.log('$comments:', $comments)
+    let $replies = $('.comments .reply-box')
+    console.log('$replies:', $replies)
+    console.log('$replies.length', $replies.length)
+    if ($replies.length) {
+      replyEditor.toTextArea()
+      $replies.remove()
+      if (isEmpty($comments)) {
+        $comments.hide()
+      }
+    }
+    let $replyBox = $('.hidden .reply-box')
+    console.log('$replyBox:', $replyBox)
+    let $clone = $replyBox.clone()
+    console.log('$clone:', $clone)
+    let parentId = $replyLink.data('parent-id')
+    console.log('parentId:', parentId)
+    let $parentId = $clone.find('.parent_id')
+    console.log('$parentId:', $parentId)
+    $parentId.val(parentId)
+    $comments.prepend($clone)
+    $comments.show()
+    let $reply = $clone.find('textarea.reply')
+    let reply = $reply[0]
+    console.log('$reply:', $reply, 'reply:', reply)
+    replyEditor = new SimpleMDE({
+      element: $reply[0],
+      hideIcons: ['side-by-side'],
+      status: false
+    })
+  })
+}
+
+function unloadCommentEditor() {
+  if (commentEditor) {
+    commentEditor.toTextArea()
+    commentEditor = null
+  }
+}
+
+</script>
+
+
+
+{% endblock %}
+
+
+{% block actions %}
+
+<div class="ui container">
+  <a href="{{ url_for('projectbp.list') }}">
+    <div class="ui button">
+      <i class="left arrow icon"></i>
+      List Projects
+    </div>
+  </a>
+  <a href="{{ url_for('projectbp.submit') }}">
+    <div class="ui button">
+      <i class="plus arrow icon"></i>
+      New Project
+    </div>
+  </a>
+</div>
+
+
 {% endblock %}
 
 
 {% block content %}
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
 <div class="ui container segment">
   <h2 class="ui dividing header">{{ project.title }}</h2>
@@ -156,13 +267,6 @@ textarea {
         >
           <input type="hidden" name="project_id" value="{{ project.id }}" />
           <textarea rows="2" name="comment" id="comment"></textarea>
-          <script>
-            var easyMDE = new SimpleMDE({
-              element: document.getElementById('comment'),
-              hideIcons: ['side-by-side'],
-              status: false
-            })
-          </script>
           <button class="ui primary button" type="submit">
             <i class="icon edit"></i>
             Comment
@@ -219,51 +323,6 @@ textarea {
     </div>
   </div>
 </div>
-
-<script>
-
-function isEmpty(el){
-  return !$.trim(el.html())
-}
-
-$('.reply-link').click((e) => {
-  console.log('click e:', e)
-  let $replyLink = $(e.currentTarget)
-  let $comment = $replyLink.closest('.comment')
-  console.log('$comment:', $comment)
-  let $comments = $comment.find('.comments:first')
-  console.log('$comments:', $comments)
-  let $replies = $('.comments .reply-box')
-  console.log('$replies:', $replies)
-  if ($replies.length) {
-    $replies.remove()
-    if (isEmpty($comments)) {
-      $comments.hide()
-    }
-
-  }
-  let $replyBox = $('.hidden .reply-box')
-  console.log('$replyBox:', $replyBox)
-  let $clone = $replyBox.clone()
-  console.log('$clone:', $clone)
-  let parentId = $replyLink.data('parent-id')
-  console.log('parentId:', parentId)
-  let $parentId = $clone.find('.parent_id')
-  console.log('$parentId:', $parentId)
-  $parentId.val(parentId)
-  $comments.prepend($clone)
-  $comments.show()
-  let $reply = $clone.find('textarea.reply')
-  let reply = $reply[0]
-  console.log('$reply:', $reply, 'reply:', reply)
-  var easyMDE = new SimpleMDE({
-    element: $reply[0],
-    hideIcons: ['side-by-side'],
-    status: false
-  })
-})
-
-</script>
 
 {% endblock %}
 
