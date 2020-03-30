@@ -44,7 +44,7 @@ textarea {
   margin: 0 !important;
 }
 
-.comments {
+div.comments {
   border-left: 1px dotted #ccc;
 }
 .comment-container.comments {
@@ -234,11 +234,12 @@ function initDeleteConfirmation() {
       >
         <button class="ui primary button" type="submit">
           {% if current_user in project.users_joined %}
+            <i class="remove user icon"></i>
             Leave
           {% else %}
+            <i class="add user icon"></i>
             Join
           {% endif %}
-          <i class="right arrow icon"></i>
         </button>
       </form>
       {%
@@ -254,6 +255,7 @@ function initDeleteConfirmation() {
           ) }}"
         >
           <button class="ui green button" type="submit">
+            <i class="edit icon"></i>
             Edit
           </button>
         </form>
@@ -268,6 +270,7 @@ function initDeleteConfirmation() {
             class="ui red button"
             type="submit"
           >
+            <i class="icon remove"></i>
             Delete
           </button>
         </form>
@@ -304,7 +307,7 @@ function initDeleteConfirmation() {
             class="ui primary button"
             type="submit"
           >
-            <i class="icon edit"></i>
+            <i class="comment icon"></i>
             Comment
           </button>
         </form>
@@ -352,7 +355,8 @@ function initDeleteConfirmation() {
             <input type="hidden" class="parent_id" name="parent_id" />
             <textarea rows="2" name="comment" class="reply"></textarea>
             <button class="ui primary button" type="submit">
-              Submit
+              <i class="comments icon"></i>
+              Reply
             </button>
           </form>
         </div>
