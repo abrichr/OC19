@@ -44,6 +44,14 @@ textarea {
   margin: 0 !important;
 }
 
+/* hack to get around extra leading and trailing paragraphs */
+.comment p:empty {
+  display: none;
+}
+.comment p:nth-last-of-type(2) {
+  margin-bottom: 0;
+}
+
 </style>
 
 <script>
@@ -347,9 +355,8 @@ function unloadCommentEditor() {
       </span>
     </div>
     <div class="text">
-      <p>
-        {{ comment.text|markdown }}
-      </p>
+      <!-- tag and text must be on same line for :empty -->
+      <p>{{ comment.text|markdown }}</p>
     </div>
     <div class="actions">
       <a class="reply-link" data-parent-id="{{ comment.id }}">Reply</a>
