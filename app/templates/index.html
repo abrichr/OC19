@@ -51,35 +51,12 @@
 .fg {
   background-image: url('/static/img/fg.png') !important;
   z-index: 1;
-  background-position: 50% 70%;
-  animation: animate-fg linear 20s 3;
+  background-position: 50% 90%;
 }
 .bg {
   background-image: url('/static/img/bg.jpg') !important;
-  background-position: 50% 70%;
-  animation: animate-bg ease 20s 3;
-}
-@keyframes animate-fg {
-    0% {
-      transform: scale(1.1) translate(0, 0);
-    }
-    50% {
-      transform: scale(1.3) translate(0, -6.5%);
-    }
-    100% {
-      transform: scale(1.1) translate(0, 0);
-    }
-}
-@keyframes animate-bg {
-    0% {
-      transform: scale(1.1) translate(0, 0);
-    }
-    50% {
-      transform: scale(1) translate(0, 1.8%);
-    }
-    100% {
-      transform: scale(1.1) translate(0, 0);
-    }
+  background-position: 50% 90%;
+  transform: scale(1.1) translate(0, 0);
 }
 
 .readable {
@@ -95,6 +72,111 @@
 }
 
 </style>
+
+<script>
+
+
+if (typeof duration === 'undefined') {
+  var isIndex
+  var bgTween
+  var fgTween
+
+  let durationIn = 5
+  let durationOut = 10
+  let ease = 'power3.inOut'
+
+  let fgStartScale = 1.25
+  let fgEndScale = 1.4
+  let fgStartY = 0
+  let fgEndY = 0
+
+  let bgStartScale = 1.25
+  let bgEndScale = 1.15
+  let bgStartY = 0
+  let bgEndY = '6.3%'
+
+  function fgAnimateIn() {
+    fgTween = gsap.to('.fg', {
+      duration: durationIn,
+      ease: ease,
+      onComplete: fgAnimateOut,
+      scale: fgEndScale,
+      y: fgEndY
+    });
+  }
+  function fgAnimateOut() {
+    fgTween = gsap.to('.fg', {
+      duration: durationOut,
+      ease: ease,
+      onComplete: fgAnimateIn,
+      scale: fgStartScale,
+      y: fgStartY
+    });
+  }
+  function bgAnimateIn() {
+    bgTween = gsap.to('.bg', {
+      duration: durationIn,
+      ease: ease,
+      onComplete: bgAnimateOut,
+      scale: bgEndScale,
+      y: bgEndY
+    });
+  }
+  function bgAnimateOut() {
+    bgTween = gsap.to('.bg', {
+      duration: durationOut,
+      ease: ease,
+      onComplete: bgAnimateIn,
+      scale: bgStartScale,
+      y: bgStartY
+    });
+  }
+  function animateIn() {
+    console.log('animateIn()')
+    fgAnimateIn()
+    bgAnimateIn()
+  }
+  function animateOut() {
+    console.log('animateOut()')
+    fgAnimateOut()
+    bgAnimateOut()
+  }
+}
+
+function updateIsIndex() {
+  let indexBody = document.getElementById('index')
+  isIndex = !!indexBody
+  console.log('updateIsIndex() isIndex:', isIndex)
+}
+
+function enable() {
+  console.log('enable() fgTween:', fgTween)
+  if (fgTween) {
+    // TODO: fix bug where images are reset when navigating back
+    fgTween.play()
+    bgTween.play()
+  } else {
+    animateIn()
+  }
+}
+
+function disable() {
+  console.log('disable()')
+  fgTween.pause()
+  bgTween.pause()
+}
+
+$(document).on('turbolinks:load', () => {
+  console.log('turbolinks::load')
+  updateIsIndex()
+  if (isIndex) {
+    enable()
+  } else {
+    disable()
+  }
+})
+
+</script>
 
 {% endblock %}
 
