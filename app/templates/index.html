@@ -46,24 +46,25 @@
   right: 0;
   background-size: cover !important;
   background-repeat: no-repeat !important;
+  transform: scale(1.1);
 }
 .fg {
   background-image: url('/static/img/fg.png') !important;
   z-index: 1;
   background-position: 50% 70%;
-  animation: animate-fg linear 20s infinite;
+  animation: animate-fg linear 20s 3;
 }
 .bg {
   background-image: url('/static/img/bg.jpg') !important;
   background-position: 50% 70%;
-  animation: animate-bg ease 20s infinite;
+  animation: animate-bg ease 20s 3;
 }
 @keyframes animate-fg {
     0% {
       transform: scale(1.1) translate(0, 0);
     }
     50% {
-      transform: scale(1.3) translate(0, -8%);
+      transform: scale(1.3) translate(0, -6.5%);
     }
     100% {
       transform: scale(1.1) translate(0, 0);
@@ -74,7 +75,7 @@
       transform: scale(1.1) translate(0, 0);
     }
     50% {
-      transform: scale(1) translate(-.5%, 1.8%);
+      transform: scale(1) translate(0, 1.8%);
     }
     100% {
       transform: scale(1.1) translate(0, 0);
