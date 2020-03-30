@@ -58,6 +58,8 @@ def view(project_id, user_slug=None):
     print('project_id:', project_id)
     print('user_slug:', user_slug)
     project = Project.query.filter_by(id=project_id).first()
+    if not project:
+        return abort(404)
     slug = slugify(project.title)
     if slug != user_slug:
         return redirect(url_for(

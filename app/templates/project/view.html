@@ -78,6 +78,7 @@ function onTurbolinksLoad() {
   console.log('onTrubolinksLoad()')
   initCommentEditor()
   initReplyLinks()
+  initDeleteConfirmation()
 }
 
 function onTurbolinksClick() {
@@ -148,6 +149,17 @@ function unloadCommentEditor() {
     commentEditor.toTextArea()
     commentEditor = null
   }
+}
+
+function initDeleteConfirmation() {
+  $('#delete-button').click((e) => {
+    let result = confirm('Are you sure? This cannot be undone!')
+    console.log('initDeleteConfirmation() result:', result)
+    if (!result) {
+      e.preventDefault()
+    }
+  })
+
 }
 
 </script>
@@ -251,7 +263,11 @@ function unloadCommentEditor() {
             url_for('projectbp.delete', project_id=project.id)
           }}"
         >
-          <button class="ui red button" type="submit">
+          <button
+            id="delete-button"
+            class="ui red button"
+            type="submit"
+          >
             Delete
           </button>
         </form>
