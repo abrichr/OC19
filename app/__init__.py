@@ -4,6 +4,7 @@ from pprint import pformat
 
 from flask import Flask, flash, redirect, request, url_for
 from flask_misaka import Misaka
+from flask_sslify import SSLify
 from flask_toastr import Toastr
 from slugify import slugify
 
@@ -26,6 +27,8 @@ logger.warning('*' * 40)
 
 toastr = Toastr(app)
 Misaka(app, autolink=True)
+
+sslify = SSLify(app)
 
 # Setup the database
 from flask_sqlalchemy import SQLAlchemy
